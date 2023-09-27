@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'EventRule Lambda and LogGroup'
+
+Parameters:
+  ProjectPrefix:
+    Type: String
+    Default: 'demo'
+    Description: 'Name of Project prefix'
+  ProjectName:
+    Type: String
+    Default: 'api-scraper'
+    Description: 'Name of Project'
+
+Resources:
+  LambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectPrefix}-lambda-${ProjectName}'
+      RetentionInDays: 14
+
+  Lambda:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Description: !Sub '${ProjectPrefix}-lambda-${ProjectName}'
+      FunctionName: !Sub '${ProjectPrefix}-lambda-${ProjectName}'
+      Code:
+        ZipFile: |
+          import json
+
+          def lambda_handler(event, context):
+            return {
+                'statusCode': 200,
+                'body': json.dumps('Hello from Lambda!')
+            }
+      Runtime: python3.11
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaRole.Arn
+    DependsOn:
+      - LambdaRole
+
+  LambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${ProjectPrefix}-role-${ProjectName}-lambda'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - 'lambda.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: !Sub '${ProjectPrefix}-policy-${ProjectName}-lambda'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action: logs:*
+                Resource: !GetAtt LambdaLogGroup.Arn
+    DependsOn:
+      - LambdaLogGroup
+
+  ScheduledRule:
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Description: !Sub '${ProjectPrefix}-scheduler-${ProjectName}'
+      ScheduleExpression: 'cron(30 09 ? * * *)'
+      FlexibleTimeWindow:
+        Mode: FLEXIBLE
+        MaximumWindowInMinutes: 15
+      Target:
+        Arn: !GetAtt Lambda.Arn
+        RoleArn: !GetAtt ScheduleRole.Arn
+    DependsOn:
+      - ScheduleRole
+
+  ScheduleRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${ProjectPrefix}-role-${ProjectName}-scheduler'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - 'scheduler.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: !Sub '${ProjectPrefix}-policy-${ProjectName}-scheduler'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action: 'lambda:InvokeFunction'
+                Resource: !GetAtt Lambda.Arn
+    DependsOn:
+      - Lambda
