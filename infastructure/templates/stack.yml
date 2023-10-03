@@ -13,6 +13,9 @@ Parameters:
   VerifiedDomain:
     Type: String
     Description: 'Name of Verified Domain'
+  ApiParameter:
+    Type: String
+    Description: 'API Parameter'
 
 Resources:
   LambdaLogGroup:
@@ -70,6 +73,11 @@ Resources:
                 Condition:
                   StringEquals:
                     ses:FromAddress: !Sub '${VerifiedDomain}'
+              - Effect: 'Allow'
+                Action:
+                  - 'ssm:GetParameter'
+                  - 'ssm:PutParameter'
+                Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ApiParameter}'
     DependsOn:
       - LambdaLogGroup
 
