@@ -16,6 +16,10 @@ Parameters:
   ApiParameter:
     Type: String
     Description: 'API Parameter'
+  ProjectRepo:
+    Type: 'String'
+    Default: 'TomNuttall/api-scraper'
+    Description: 'Repo Path i.e GitHubUser/RepoName'
 
 Resources:
   LambdaLogGroup:
@@ -115,6 +119,35 @@ Resources:
             Statement:
               - Effect: 'Allow'
                 Action: 'lambda:InvokeFunction'
+                Resource: !GetAtt Lambda.Arn
+    DependsOn:
+      - Lambda
+
+  GitHubActionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${ProjectPrefix}-role-${ProjectName}-github-lambda'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Federated:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Action:
+              - 'sts:AssumeRoleWithWebIdentity'
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: 'sts.amazonaws.com'
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub 'repo:${ProjectRepo}:*'
+      Policies:
+        - PolicyName: !Sub '${ProjectPrefix}-policy-${ProjectName}-github-lambda'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action: 'lambda:UpdateFunctionCode'
                 Resource: !GetAtt Lambda.Arn
     DependsOn:
       - Lambda
