@@ -22,7 +22,7 @@ jobs:
         working-directory: ./lambda
 
       - name: Zip Lambda package
-        run: zip -r lambda_package.zip ./
+        run: zip -r ../lambda_package.zip ./
         working-directory: ./lambda
 
       - name: Configure AWS Credentials for Lambda Access
