@@ -1,0 +1,35 @@
+name: Build + Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Lambda Dependancy
+        run: pip install requests -t ./
+        working-directory: ./lambda
+
+      - name: Zip Lambda package
+        run: zip -rj lambda_package.zip ./lambda
+
+      - name: Configure AWS Credentials for Lambda Access
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_LAMBDA_ROLE }}
+          role-duration-seconds: 900
+          aws-region: eu-west-2
+
+      - name: Deploy lambda
+        run: aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA }} --zip-file fileb://lambda_package.zip
