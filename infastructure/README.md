@@ -9,7 +9,7 @@
 ### Parameter Store
 
 - Create two secure string parameters in Paramater Store
-- One for app details, these should be set from following the [Strava Api](./README.md#strava-api) steps
+- One for app details, these should be set from following the [Strava Api](../README.md#strava-api) steps
 
 ```json
 {
