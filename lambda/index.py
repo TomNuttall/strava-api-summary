@@ -8,6 +8,9 @@ ssm = boto3.client('ssm', region_name='eu-west-2')
 
 
 def get_access_token():
+    app_param = ssm.get_parameter(Name='stravaapiapp', WithDecryption=True)
+    app = json.loads(app_param['Parameter']['Value'])
+
     token_param = ssm.get_parameter(Name='stravaapitoken', WithDecryption=True)
     api_token = json.loads(token_param['Parameter']['Value'])
 
@@ -17,15 +20,15 @@ def get_access_token():
     if not api_token.get('expires_at'):
         should_refresh = True
         params['grant_type'] = 'authorization_code'
-        params['code'] = api_token['code']
+        params['code'] = app['code']
     elif time.time() > api_token['expires_at']:
         should_refresh = True
         params['grant_type'] = 'refresh_token'
         params['refresh_token'] = api_token['refresh_token']
 
     if should_refresh:
-        params['client_id'] = api_token['client_code']
-        params['client_secret'] = api_token['client_secret']
+        params['client_id'] = app['client_code']
+        params['client_secret'] = app['client_secret']
 
         auth_url = 'https://www.strava.com/oauth/token'
         res = requests.post(auth_url, params)
@@ -38,11 +41,19 @@ def get_access_token():
         ssm.put_parameter(Name='stravaapitoken',
                           Value=json.dumps(api_token), Overwrite=True)
 
-    return api_token['access_token']
+    return api_token['access_token'], res_data['athlete]']['id']
 
 
 def lambda_handler(event, context):
-    access_token = get_access_token()
+    access_token, athlete = get_access_token()
+
+    # activity_url = 'https://www.strava.com/api/v3/athlete/activities'
+    stats_url = f'https://www.strava.com/api/v3/athletes/{athlete}/stats'
+    res = requests.get(stats_url, params={'access_token': access_token})
+
+    if res.status_code == 200:
+        res_data = res.json()
+        print(res_data['recent_run_totals'])
 
     return {
         'statusCode': 200,
