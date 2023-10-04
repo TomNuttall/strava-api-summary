@@ -41,7 +41,26 @@ def get_access_token():
         ssm.put_parameter(Name='stravaapitoken',
                           Value=json.dumps(api_token), Overwrite=True)
 
-    return api_token['access_token'], res_data['athlete]']['id']
+    return api_token['access_token'], app['athlete]']['id']
+
+
+def send_email(to_address, from_address, title, data):
+    response = ses.send_email(
+        Destination={'ToAddresses': [to_address]},
+        Message={
+            'Body': {
+                'Text': {
+                    'Charset': 'UTF-8',
+                    'Data': data,
+                }
+            },
+            'Subject': {
+                'Charset': 'UTF-8',
+                'Data': title,
+            },
+        },
+        Source=from_address)
+    return response
 
 
 def lambda_handler(event, context):
