@@ -28,7 +28,7 @@
 {
   "expires_at": "",
   "access_token": "",
-  "refresh_token" ""
+  "refresh_token": ""
 }
 ```
 
