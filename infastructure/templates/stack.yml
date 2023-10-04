@@ -16,6 +16,9 @@ Parameters:
   ApiParameter:
     Type: String
     Description: 'API Parameter'
+  AppParameter:
+    Type: String
+    Description: 'App Parameter'
   ProjectRepo:
     Type: 'String'
     Default: 'TomNuttall/api-scraper'
@@ -81,7 +84,9 @@ Resources:
                 Action:
                   - 'ssm:GetParameter'
                   - 'ssm:PutParameter'
-                Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ApiParameter}'
+                Resource:
+                  - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ApiParameter}'
+                  - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AppParameter}'
     DependsOn:
       - LambdaLogGroup
 
