@@ -3,6 +3,8 @@ import time
 import boto3
 import requests
 import os
+import datetime as dt
+from jinja2 import Environment, FileSystemLoader
 
 ses = boto3.client('ses', region_name='eu-west-2')
 ssm = boto3.client('ssm', region_name='eu-west-2')
@@ -50,7 +52,7 @@ def send_email(to_address, from_address, title, data):
         Destination={'ToAddresses': [to_address]},
         Message={
             'Body': {
-                'Text': {
+                'Html': {
                     'Charset': 'UTF-8',
                     'Data': data,
                 }
@@ -64,19 +66,28 @@ def send_email(to_address, from_address, title, data):
     return response
 
 
+def generate_html(data):
+    env = Environment(loader=FileSystemLoader(
+        f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'))
+    template = env.get_template('email.html')
+
+    return template.render(data=data)
+
+
 def lambda_handler(event, context):
     access_token, athlete = get_access_token()
 
-    # activity_url = 'https://www.strava.com/api/v3/athlete/activities'
-    stats_url = f'https://www.strava.com/api/v3/athletes/{athlete}/stats'
-    res = requests.get(stats_url, params={'access_token': access_token})
+    date_obj = dt.datetime.now()
+    date_obj -= dt.timedelta(days=7)
+    url = f'https://www.strava.com/api/v3/athlete/activities?after={dt.datetime.timestamp(date_obj)}'
+    res = requests.get(url, params={'access_token': access_token})
 
     if res.status_code == 200:
-        res_data = res.json()
-        print(res_data['recent_run_totals'])
+        body = generate_html(res.json())
 
-        send_email(os.environ.get('TARGET_EMAIL'), os.environ.get(
-            'SEND_EMAIL'), 'Recent Runs', json.dumps(res_data['recent_run_totals']))
+        if not os.environ.get('DISABLE_EMAIL'):
+            send_email(os.environ.get('TARGET_EMAIL'), os.environ.get(
+                'SEND_EMAIL'), 'Recent Runs', body)
 
     return {
         'statusCode': 200,
