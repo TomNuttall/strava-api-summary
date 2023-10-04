@@ -2,6 +2,7 @@ import json
 import time
 import boto3
 import requests
+import os
 
 ses = boto3.client('ses', region_name='eu-west-2')
 ssm = boto3.client('ssm', region_name='eu-west-2')
@@ -41,7 +42,7 @@ def get_access_token():
         ssm.put_parameter(Name='stravaapitoken',
                           Value=json.dumps(api_token), Overwrite=True)
 
-    return api_token['access_token'], app['athlete]']['id']
+    return api_token['access_token'], app['athlete']['id']
 
 
 def send_email(to_address, from_address, title, data):
@@ -73,6 +74,9 @@ def lambda_handler(event, context):
     if res.status_code == 200:
         res_data = res.json()
         print(res_data['recent_run_totals'])
+
+        send_email(os.environ.get('TARGET_EMAIL'), os.environ.get(
+            'SEND_EMAIL'), 'Recent Runs', json.dumps(res_data['recent_run_totals']))
 
     return {
         'statusCode': 200,
