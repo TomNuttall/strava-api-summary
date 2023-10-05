@@ -1,16 +1,20 @@
 import json
 import time
-import boto3
-import requests
 import os
 import datetime as dt
+import boto3
+import requests
 from jinja2 import Environment, FileSystemLoader
 
-ses = boto3.client('ses', region_name='eu-west-2')
-ssm = boto3.client('ssm', region_name='eu-west-2')
+AUTH_URL = 'https://www.strava.com/oauth/token'
+ACTIVITIES_URL = 'https://www.strava.com/api/v3/athlete/activities'
 
 
 def get_access_token():
+    """ Retrive access token from Parameter store and check if refresh needed."""
+
+    ssm = boto3.client('ssm')
+
     app_param = ssm.get_parameter(Name='stravaapiapp', WithDecryption=True)
     app = json.loads(app_param['Parameter']['Value'])
 
@@ -33,21 +37,53 @@ def get_access_token():
         params['client_id'] = app['client_code']
         params['client_secret'] = app['client_secret']
 
-        auth_url = 'https://www.strava.com/oauth/token'
-        res = requests.post(auth_url, params)
-        res_data = res.json()
+        res = requests.post(AUTH_URL, params)
+        if res.status_code == 200:
+            res_data = res.json()
 
-        api_token['expires_at'] = res_data['expires_at']
-        api_token['access_token'] = res_data['access_token']
-        api_token['refresh_token'] = res_data['refresh_token']
+            api_token['expires_at'] = res_data['expires_at']
+            api_token['access_token'] = res_data['access_token']
+            api_token['refresh_token'] = res_data['refresh_token']
 
-        ssm.put_parameter(Name='stravaapitoken',
-                          Value=json.dumps(api_token), Overwrite=True)
+            ssm.put_parameter(Name='stravaapitoken',
+                              Value=json.dumps(api_token), Overwrite=True)
 
-    return api_token['access_token'], app['athlete']['id']
+    return api_token['access_token']
+
+
+def scrape_api(access_token):
+    """ Get last 7 days of activities from strava api."""
+
+    data = None
+
+    date_obj = dt.datetime.now()
+    date_obj -= dt.timedelta(days=7)
+    url = f'{ACTIVITIES_URL}?after={dt.datetime.timestamp(date_obj)}'
+    res = requests.get(url, params={'access_token': access_token})
+
+    if res.status_code == 200:
+        data = res.json()
+
+    return data
+
+
+def generate_html(data):
+    """ Use email template to generate html from data."""
+
+    env = Environment(loader=FileSystemLoader(
+        f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'))
+    template = env.get_template('email.html')
+
+    return 'Recent Runs', template.render(data=data)
 
 
 def send_email(to_address, from_address, title, data):
+    """ Use SES to send email."""
+
+    if os.environ.get('DISABLE_EMAIL'):
+        return
+
+    ses = boto3.client('ses')
     response = ses.send_email(
         Destination={'ToAddresses': [to_address]},
         Message={
@@ -66,30 +102,20 @@ def send_email(to_address, from_address, title, data):
     return response
 
 
-def generate_html(data):
-    env = Environment(loader=FileSystemLoader(
-        f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'))
-    template = env.get_template('email.html')
-
-    return template.render(data=data)
-
-
 def lambda_handler(event, context):
-    access_token, athlete = get_access_token()
+    """ ."""
 
-    date_obj = dt.datetime.now()
-    date_obj -= dt.timedelta(days=7)
-    url = f'https://www.strava.com/api/v3/athlete/activities?after={dt.datetime.timestamp(date_obj)}'
-    res = requests.get(url, params={'access_token': access_token})
+    access_token = get_access_token()
+    data = scrape_api(access_token)
 
-    if res.status_code == 200:
-        body = generate_html(res.json())
+    if data:
+        title, body = generate_html(data)
+        print(title, body)
 
-        if not os.environ.get('DISABLE_EMAIL'):
-            send_email(os.environ.get('TARGET_EMAIL'), os.environ.get(
-                'SEND_EMAIL'), 'Recent Runs', body)
+        send_email(os.environ.get('TARGET_EMAIL'),
+                   os.environ.get('SEND_EMAIL'), title, body)
 
     return {
         'statusCode': 200,
-        'body': 'Success'
+        'body': 'Completed'
     }
