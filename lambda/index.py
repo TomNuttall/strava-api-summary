@@ -56,21 +56,18 @@ def get_access_token():
 def scrape_api(access_token):
     """ Get last 7 days of activities from strava api."""
 
-    data = None
+    data = {}
 
     date_obj = dt.datetime.now()
+    data['to_date'] = date_obj.strftime("%d/%m/%Y")
+
     date_obj -= dt.timedelta(days=DATE_RANGE)
+    data['from_date'] = date_obj.strftime("%d/%m/%Y")
     url = f'{ACTIVITIES_URL}?after={dt.datetime.timestamp(date_obj)}'
     res = requests.get(url, params={'access_token': access_token})
 
-    if res.status_code == 200:
-        data = res.json()
-
-    return data
-
-
-def generate_html(data):
-    """ Use email template to generate html from data."""
+    if res.status_code != 200:
+        return
 
     def transform_activity(activity):
         """ Transform activity to pull out relevant info."""
@@ -94,21 +91,22 @@ def generate_html(data):
         acc['total_distance'] += activity['distance']
         return acc
 
-    parsed_data = {}
-    parsed_data['activities'] = list(map(transform_activity, data))
-    parsed_data['summary'] = reduce(
-        reduce_summary, parsed_data['activities'], {'count': 0, 'total_time': 0, 'total_distance': 0})
+    data = {}
+    data['activities'] = list(map(transform_activity, res.json()))
+    data['summary'] = reduce(
+        reduce_summary, data['activities'], {'count': 0, 'total_time': 0, 'total_distance': 0})
 
-    date_obj = dt.datetime.now()
-    parsed_data['to_date'] = date_obj.strftime("%d/%m/%Y")
-    date_obj -= dt.timedelta(days=DATE_RANGE)
-    parsed_data['from_date'] = date_obj.strftime("%d/%m/%Y")
+    return data
+
+
+def generate_html(data):
+    """ Use email template to generate html from data."""
 
     env = Environment(loader=FileSystemLoader(
         f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'))
     template = env.get_template('email.html')
 
-    return 'Recent Runs', template.render(data=parsed_data)
+    return 'Recent Runs', template.render(data=data)
 
 
 def send_email(to_address, from_address, title, data):
