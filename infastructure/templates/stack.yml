@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: 'EventRule Lambda and LogGroup'
+Description: 'EventRule, Lambda, LogGroup and GitHub role'
 
 Parameters:
   ProjectPrefix:
@@ -8,7 +8,6 @@ Parameters:
     Description: 'Name of Project prefix'
   ProjectName:
     Type: String
-    Default: 'api-scraper'
     Description: 'Name of Project'
   VerifiedDomain:
     Type: String
@@ -21,7 +20,6 @@ Parameters:
     Description: 'App Parameter'
   ProjectRepo:
     Type: 'String'
-    Default: 'TomNuttall/api-scraper'
     Description: 'Repo Path i.e GitHubUser/RepoName'
 
 Resources:
@@ -94,7 +92,7 @@ Resources:
     Type: AWS::Scheduler::Schedule
     Properties:
       Description: !Sub '${ProjectPrefix}-scheduler-${ProjectName}'
-      ScheduleExpression: 'cron(30 09 ? * * *)'
+      ScheduleExpression: 'cron(30 12 ? * 1 *)'
       FlexibleTimeWindow:
         Mode: FLEXIBLE
         MaximumWindowInMinutes: 15
