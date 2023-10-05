@@ -63,6 +63,7 @@ def scrape_api(access_token):
 
     date_obj -= dt.timedelta(days=DATE_RANGE)
     data['from_date'] = date_obj.strftime("%d/%m/%Y")
+
     url = f'{ACTIVITIES_URL}?after={dt.datetime.timestamp(date_obj)}'
     res = requests.get(url, params={'access_token': access_token})
 
@@ -91,7 +92,6 @@ def scrape_api(access_token):
         acc['total_distance'] += activity['distance']
         return acc
 
-    data = {}
     data['activities'] = list(map(transform_activity, res.json()))
     data['summary'] = reduce(
         reduce_summary, data['activities'], {'count': 0, 'total_time': 0, 'total_distance': 0})
