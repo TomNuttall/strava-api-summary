@@ -1,6 +1,18 @@
-<h1>Summary</h1>
+<h1>{{data.from_date}} - {{data.to_date}}</h1>
+
+<h2>Summary</h2>
+<p><strong>Number of Activities:</strong> {{ data.summary.count }}</p>
+<p><strong>Total Distance:</strong> {{ data.summary.total_distance }}km</p>
+<p><strong>Total Time:</strong> {{ data.summary.total_time}}</p>
+
+<h2>Activities</h2>
 <ul>
-  {% for item in data %}
-  <li>{{ item.name }} - {{ item.distance }} - {{ item.start_date }}</li>
+  {% for activity in data.activities %}
+  <li>
+    <h3>{{ activity.name }}</h3>
+    <p><strong>Date:</strong> {{ activity.date }}</p>
+    <p><strong>Distance:</strong> {{ activity.distance }}km</p>
+    <p><strong>Time:</strong> {{ activity.duration }}</p>
+  </li>
   {% endfor %}
 </ul>

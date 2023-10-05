@@ -1,6 +1,7 @@
 import json
 import time
 import os
+from functools import reduce
 import datetime as dt
 import boto3
 import requests
@@ -8,6 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 
 AUTH_URL = 'https://www.strava.com/oauth/token'
 ACTIVITIES_URL = 'https://www.strava.com/api/v3/athlete/activities'
+DATE_RANGE = 7
 
 
 def get_access_token():
@@ -57,7 +59,7 @@ def scrape_api(access_token):
     data = None
 
     date_obj = dt.datetime.now()
-    date_obj -= dt.timedelta(days=7)
+    date_obj -= dt.timedelta(days=DATE_RANGE)
     url = f'{ACTIVITIES_URL}?after={dt.datetime.timestamp(date_obj)}'
     res = requests.get(url, params={'access_token': access_token})
 
@@ -70,11 +72,43 @@ def scrape_api(access_token):
 def generate_html(data):
     """ Use email template to generate html from data."""
 
+    def transform_activity(activity):
+        """ Transform activity to pull out relevant info."""
+
+        res = {}
+        res['name'] = activity['name']
+        res['distance'] = round(activity['distance'] / 1000, 2)
+        res['duration'] = round(activity['elapsed_time'] / 60, 2)
+
+        date_obj = dt.datetime.strptime(
+            activity['start_date_local'], "%Y-%m-%dT%H:%M:%SZ")
+        res['date'] = date_obj.strftime("%d/%m/%Y %H:%M")
+
+        return res
+
+    def reduce_summary(acc, activity):
+        """ Reduce activity to summary."""
+
+        acc['count'] += 1
+        acc['total_time'] += activity['duration']
+        acc['total_distance'] += activity['distance']
+        return acc
+
+    parsed_data = {}
+    parsed_data['activities'] = list(map(transform_activity, data))
+    parsed_data['summary'] = reduce(
+        reduce_summary, parsed_data['activities'], {'count': 0, 'total_time': 0, 'total_distance': 0})
+
+    date_obj = dt.datetime.now()
+    parsed_data['to_date'] = date_obj.strftime("%d/%m/%Y")
+    date_obj -= dt.timedelta(days=DATE_RANGE)
+    parsed_data['from_date'] = date_obj.strftime("%d/%m/%Y")
+
     env = Environment(loader=FileSystemLoader(
         f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'))
     template = env.get_template('email.html')
 
-    return 'Recent Runs', template.render(data=data)
+    return 'Recent Runs', template.render(data=parsed_data)
 
 
 def send_email(to_address, from_address, title, data):
@@ -110,8 +144,6 @@ def lambda_handler(event, context):
 
     if data:
         title, body = generate_html(data)
-        print(title, body)
-
         send_email(os.environ.get('TARGET_EMAIL'),
                    os.environ.get('SEND_EMAIL'), title, body)
 
