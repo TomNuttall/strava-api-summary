@@ -21,7 +21,7 @@ jobs:
         run: |
           pip install requests -t ./
           pip install Jinja2 -t ./
-          pip install premailer -t ./
+          pip install css_inline -t ./
         working-directory: ./lambda
 
       - name: Zip Lambda package

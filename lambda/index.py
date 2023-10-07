@@ -6,7 +6,7 @@ import datetime as dt
 import boto3
 import requests
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from premailer import transform
+import css_inline
 
 AUTH_URL = 'https://www.strava.com/oauth/token'
 ACTIVITIES_URL = 'https://www.strava.com/api/v3/athlete/activities'
@@ -108,11 +108,7 @@ def generate_html(data):
         f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'), autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template('email.html')
 
-    body = transform(template.render(data=data))
-
-    with open('index.html', 'w') as output:
-        output.write(body)
-
+    body = css_inline.inline(template.render(data=data))
     return data['title'], body
 
 
