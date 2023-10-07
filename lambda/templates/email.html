@@ -5,76 +5,106 @@
     <title>{{data.title}}</title>
   </head>
   <style type="text/css">
-    .body {
+    body {
       font-family: system-ui, Helvetica, Arial, sans-serif;
-      width: 90%;
-      margin: auto;
+      background-color: #f2f2f2
     }
 
-    .h1 {
-      font-size: 2em;
-      margin-bottom: 0.67em;
-    }
-
-    .h2 {
-      font-size: 1.5em;
-      margin: 0.83em 0;
-    }
-
-    .h3 {
-      font-size: 1.17em;
-      margin: 1em 0;
-    }
-
-    .activity-title {
-      margin-top: 0;
+    table {
+      width: 100%;
     }
 
     th {
-      width: 33%;
+      width: 35%;
       text-align: left;
+      padding-left: 1em;
     }
+
+    .content {
+      max-width:600px;
+      margin: auto;
+    }
+
+    .panel {
+      background-color: white;
+      padding: 1em;
+      margin-bottom: 1em;
+      width: 100%;
+    }
+
+    .panel__title {
+      background-color: black;
+      color: white;
+      font-size: 1.5em;
+      padding: 1em;
+      margin-bottom: 0.75em;
+    }
+
+    .activity-title {
+      font-size: 1.17em;
+      padding: 0 0.75em;
+      margin-bottom: 0.75em;
+    }
+
   </style>
 
   <body>
-    <table class="body" role="presentation">
-      <caption>{{data.from_date}} - {{data.to_date}}</caption>
-      <tr>
-        <td colspan="2"><div class="h2">Summary</div></td>
-      </tr>
-      <tr>
-        <th scope="row">Number of Activities</th>
-        <td>{{ data.summary.count }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Total Distance</th>
-        <td>{{ data.summary.total_distance }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Total Time</th>
-        <td>{{ data.summary.total_time }}</td>
-      </tr>
-      <tr>
-        <td colspan="2"><div class="h2">Activities</div></td>
-      </tr>
-
-      {% for activity in data.activities %}
-      <tr>
-        <td colspan="2"><div class="h3 activity-title">{{ activity.name }}<div></td>
-      </tr>
-      <tr>
-        <th scope="row">Date</th>
-        <td>{{ activity.date }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Distance</th>
-        <td>{{ activity.distance }}km</td>
-      </tr>
-      <tr>
-        <th scope="row">Time</th>
-        <td>{{ activity.duration }}</td>
-      </tr>
-      {% endfor %}
-    </table>
+    <div class="content">
+      <table role="presentation">
+        <tr>
+          <td>
+            <table role="presentation" class="panel">
+              <tr>
+                <td colspan="2"><div class="panel__title">Summary</div></td>
+              </tr>
+              <tr>
+                <th scope="row">Number of Activities</th>
+                <td>{{ data.summary.count }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Total Distance</th>
+                <td>{{ data.summary.total_distance }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Total Time</th>
+                <td>{{ data.summary.total_time }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table role="presentation" class="panel">
+              <tr>
+                <td colspan="2"><div class="panel__title">Activities</div></td>
+              </tr>
+              <tr>
+                <td>
+                  {% for activity in data.activities %}
+                  <table role="presentation">
+                    <tr>
+                      <td colspan="2"><div class="activity-title">{{ activity.name }}<div></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Date</th>
+                      <td>{{ activity.date }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Distance</th>
+                      <td>{{ activity.distance }}km</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Time</th>
+                      <td>{{ activity.duration }}</td>
+                    </tr>
+                  </table>
+                  {% endfor %}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>
