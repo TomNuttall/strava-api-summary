@@ -112,10 +112,12 @@ def generate_html(data):
     return data['title'], body
 
 
-def send_email(to_address, from_address, title, data):
+def send_email(to_address, from_address, title, body_data):
     """ Use SES to send email."""
 
     if os.environ.get('DISABLE_EMAIL'):
+        with open('index.html', 'w') as file:
+            file.write(body_data)
         return
 
     ses = boto3.client('ses')
@@ -125,7 +127,7 @@ def send_email(to_address, from_address, title, data):
             'Body': {
                 'Html': {
                     'Charset': 'UTF-8',
-                    'Data': data,
+                    'Data': body_data,
                 }
             },
             'Subject': {
