@@ -1,18 +1,44 @@
-<h1>{{data.from_date}} - {{data.to_date}}</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{data.title}}</title>
+  </head>
+  <style type="text/css">
+    .body {
+      font-family: system-ui, Helvetica, Arial, sans-serif;
+      width: 90%;
+      margin: auto;
+    }
 
-<h2>Summary</h2>
-<p><strong>Number of Activities:</strong> {{ data.summary.count }}</p>
-<p><strong>Total Distance:</strong> {{ data.summary.total_distance }}km</p>
-<p><strong>Total Time:</strong> {{ data.summary.total_time}}</p>
+    ul {
+      list-style: none;
+      padding-inline-start: 0em;
+    }
+  </style>
 
-<h2>Activities</h2>
-<ul>
-  {% for activity in data.activities %}
-  <li>
-    <h3>{{ activity.name }}</h3>
-    <p><strong>Date:</strong> {{ activity.date }}</p>
-    <p><strong>Distance:</strong> {{ activity.distance }}km</p>
-    <p><strong>Time:</strong> {{ activity.duration }}</p>
-  </li>
-  {% endfor %}
-</ul>
+  <body>
+    <div class="body">
+      <h1>{{data.from_date}} - {{data.to_date}}</h1>
+
+      <h2>Summary</h2>
+      <p><strong>Number of Activities:</strong> {{ data.summary.count }}</p>
+      <p>
+        <strong>Total Distance:</strong> {{ data.summary.total_distance }}km
+      </p>
+      <p><strong>Total Time:</strong> {{ data.summary.total_time}}</p>
+
+      <h2>Activities</h2>
+      <ul>
+        {% for activity in data.activities %}
+        <li>
+          <h3>{{ activity.name }}</h3>
+          <p><strong>Date:</strong> {{ activity.date }}</p>
+          <p><strong>Distance:</strong> {{ activity.distance }}km</p>
+          <p><strong>Time:</strong> {{ activity.duration }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>

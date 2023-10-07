@@ -5,7 +5,8 @@ from functools import reduce
 import datetime as dt
 import boto3
 import requests
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+from premailer import transform
 
 AUTH_URL = 'https://www.strava.com/oauth/token'
 ACTIVITIES_URL = 'https://www.strava.com/api/v3/athlete/activities'
@@ -92,6 +93,7 @@ def scrape_api(access_token):
         acc['total_distance'] += activity['distance']
         return acc
 
+    data['title'] = 'Recent Runs'
     data['activities'] = list(map(transform_activity, res.json()))
     data['summary'] = reduce(
         reduce_summary, data['activities'], {'count': 0, 'total_time': 0, 'total_distance': 0})
@@ -103,10 +105,15 @@ def generate_html(data):
     """ Use email template to generate html from data."""
 
     env = Environment(loader=FileSystemLoader(
-        f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'))
+        f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'), autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template('email.html')
 
-    return 'Recent Runs', template.render(data=data)
+    body = transform(template.render(data=data))
+
+    with open('index.html', 'w') as output:
+        output.write(body)
+
+    return data['title'], body
 
 
 def send_email(to_address, from_address, title, data):
