@@ -81,7 +81,8 @@ def scrape_api(access_token):
 
         date_obj = dt.datetime.strptime(
             activity['start_date_local'], "%Y-%m-%dT%H:%M:%SZ")
-        res['date'] = date_obj.strftime("%d/%m/%Y %H:%M")
+        res['date'] = date_obj.strftime("%d/%m/%Y")
+        res['date_time'] = date_obj.strftime("%H:%M")
 
         return res
 

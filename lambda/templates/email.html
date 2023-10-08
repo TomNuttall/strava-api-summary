@@ -7,28 +7,28 @@
   <style type="text/css">
     body {
       font-family: system-ui, Helvetica, Arial, sans-serif;
-      background-color: #f2f2f2
+      background-color: #f2f2f2;
     }
 
     table {
       width: 100%;
+      margin-bottom: 0.75em;
+      padding: 0 1em;
     }
 
     th {
-      width: 35%;
       text-align: left;
-      padding-left: 1em;
     }
 
     .content {
-      max-width:600px;
+      max-width: 600px;
       margin: 2em auto;
     }
 
     .panel {
       background-color: white;
       padding: 1em;
-      margin-bottom: 1em;
+      margin-bottom: 2em;
       width: 100%;
     }
 
@@ -37,74 +37,57 @@
       color: white;
       font-size: 1.5em;
       padding: 1em;
+      margin-top: 0em;
       margin-bottom: 0.75em;
     }
 
-    .activity-title {
-      font-size: 1.17em;
-      padding: 0 0.75em;
-      margin-bottom: 0.75em;
+    .activities th {
+      padding-bottom: 0.5em;
     }
-
   </style>
 
   <body>
     <div class="content">
-      <table role="presentation">
-        <tr>
-          <td>
-            <table role="presentation" class="panel">
-              <tr>
-                <td colspan="2"><div class="panel__title">Summary</div></td>
-              </tr>
-              <tr>
-                <th scope="row">Number of Activities</th>
-                <td>{{ data.summary.count }}</td>
-              </tr>
-              <tr>
-                <th scope="row">Total Distance</th>
-                <td>{{ data.summary.total_distance }}</td>
-              </tr>
-              <tr>
-                <th scope="row">Total Time</th>
-                <td>{{ data.summary.total_time }}</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <table role="presentation" class="panel">
-              <tr>
-                <td colspan="2"><div class="panel__title">Activities</div></td>
-              </tr>
-              <tr>
-                <td>
-                  {% for activity in data.activities %}
-                  <table role="presentation">
-                    <tr>
-                      <td colspan="2"><div class="activity-title">{{ activity.name }}<div></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Date</th>
-                      <td>{{ activity.date }}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Distance</th>
-                      <td>{{ activity.distance }}km</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Time</th>
-                      <td>{{ activity.duration }}</td>
-                    </tr>
-                  </table>
-                  {% endfor %}
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
+      <div class="panel summary">
+        <p class="panel__title">Summary</p>
+        <table>
+          <tr>
+            <th scope="row">Number of Activities</th>
+            <td>{{ data.summary.count }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Total Distance</th>
+            <td>{{ data.summary.total_distance|round(2) }}km</td>
+          </tr>
+          <tr>
+            <th scope="row">Total Time</th>
+            <td>{{ data.summary.total_time|round(2) }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="panel activities">
+        <p class="panel__title">Activities</p>
+        <table>
+          <thead>
+            <th>Name</th>
+            <th>Time</th>
+            <th>Date</th>
+            <th>Distance</th>
+            <th>Duration</th>
+          </thead>
+          <tbody>
+            {% for activity in data.activities|reverse %}
+            <tr>
+              <td>{{ activity.name }}</td>
+              <td>{{ activity.date_time }}</td>
+              <td>{{ activity.date }}</td>
+              <td>{{ activity.distance|round(2) }}km</td>
+              <td>{{ activity.duration|round(2) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>
