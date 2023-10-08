@@ -6,6 +6,16 @@
 - GitHub action runs on push to main branch.
   - Builds lambda package and deploys.
 
+## Architecture Diagram
+
+<img
+  src='../docs/aws_architecture-diagram.svg'
+  raw=true
+  alt='AWS Architecture Diagram'
+  height="500px"
+  width="auto"
+/>
+
 ### Parameter Store
 
 - Create two secure string parameters in Paramater Store
