@@ -4,8 +4,8 @@
 
 - Use SSM to retrive auth token and handle refresh token
 - Get stats from Strava Api
-- Generate html for stats with Jinja2 template
-- Use SES to sens a summary email
+- Generate html with inline styling for stats with Jinja2 template
+- Use SES to send a summary email
 
 ### Example
 
