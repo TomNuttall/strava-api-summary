@@ -13,7 +13,7 @@ class TestAccessToken:
         """ Should request a new token."""
 
         # Arrange
-        ssm = boto3.client('ssm', 'eu-west-2')
+        ssm = boto3.client('ssm')
         ssm.put_parameter(
             Name="stravaapiapp",
             Value=json.dumps(
@@ -45,7 +45,7 @@ class TestAccessToken:
         # Arrange
         access_token = "abc123"
 
-        ssm = boto3.client('ssm', 'eu-west-2')
+        ssm = boto3.client('ssm')
         ssm.put_parameter(
             Name="stravaapiapp",
             Value=json.dumps(
@@ -72,7 +72,7 @@ class TestAccessToken:
         # Arrange
         access_token = "abc123"
 
-        ssm = boto3.client('ssm', 'eu-west-2')
+        ssm = boto3.client('ssm')
         ssm.put_parameter(
             Name="stravaapiapp",
             Value=json.dumps(
