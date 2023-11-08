@@ -51,7 +51,7 @@ def get_access_token():
             ssm.put_parameter(Name='stravaapitoken',
                               Value=json.dumps(api_token), Overwrite=True)
 
-    return api_token['access_token']
+    return api_token.get('access_token')
 
 
 def scrape_api(access_token):
@@ -65,8 +65,8 @@ def scrape_api(access_token):
     date_obj -= dt.timedelta(days=DATE_RANGE)
     data['from_date'] = date_obj.strftime("%d/%m/%Y")
 
-    url = f'{ACTIVITIES_URL}?after={dt.datetime.timestamp(date_obj)}'
-    res = requests.get(url, params={'access_token': access_token})
+    res = requests.get(f'{ACTIVITIES_URL}?after={dt.datetime.timestamp(date_obj)}', params={
+                       'access_token': access_token})
 
     if res.status_code != 200:
         return
@@ -102,11 +102,13 @@ def scrape_api(access_token):
     return data
 
 
-def generate_html(data):
+def generate_html(template_root, data):
     """ Use email template to generate html from data."""
 
+    dir = os.getcwd()
+
     env = Environment(loader=FileSystemLoader(
-        f'{os.environ.get("LAMBDA_TASK_ROOT")}/templates/'), autoescape=select_autoescape(['html', 'xml']))
+        f'{template_root}/templates/'), autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template('email.html')
 
     body = css_inline.inline(template.render(data=data))
@@ -116,13 +118,9 @@ def generate_html(data):
 def send_email(to_address, from_address, title, body_data):
     """ Use SES to send email."""
 
-    if os.environ.get('DISABLE_EMAIL'):
-        with open('index.html', 'w') as file:
-            file.write(body_data)
-        return
-
     ses = boto3.client('ses')
-    response = ses.send_email(
+
+    res = ses.send_email(
         Destination={'ToAddresses': [to_address]},
         Message={
             'Body': {
@@ -137,19 +135,23 @@ def send_email(to_address, from_address, title, body_data):
             },
         },
         Source=from_address)
-    return response
+
+    return res
 
 
 def lambda_handler(event, context):
     """ ."""
 
     access_token = get_access_token()
-    data = scrape_api(access_token)
+    if access_token:
+        data = scrape_api(access_token)
 
-    if data:
-        title, body = generate_html(data)
-        send_email(os.environ.get('TARGET_EMAIL'),
-                   os.environ.get('SEND_EMAIL'), title, body)
+        if data:
+            title, body = generate_html(
+                os.environ.get("LAMBDA_TASK_ROOT"), data)
+
+            send_email(os.environ.get('TARGET_EMAIL'),
+                       os.environ.get('SEND_EMAIL'), title, body)
 
     return {
         'statusCode': 200,

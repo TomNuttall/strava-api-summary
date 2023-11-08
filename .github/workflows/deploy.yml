@@ -17,16 +17,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Test
+        run: |
+          pip install -r requirements.txt
+          pytest
+
       - name: Install Lambda Dependancy
         run: |
           pip install requests -t ./
           pip install Jinja2 -t ./
           pip install css_inline -t ./
-        working-directory: ./lambda
+        working-directory: ./app
 
       - name: Zip Lambda package
         run: zip -r ../lambda_package.zip ./
-        working-directory: ./lambda
+        working-directory: ./app
 
       - name: Configure AWS Credentials for Lambda Access
         uses: aws-actions/configure-aws-credentials@v2
