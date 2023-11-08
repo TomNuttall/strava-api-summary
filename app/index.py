@@ -16,7 +16,7 @@ DATE_RANGE = 7
 def get_access_token():
     """ Retrive access token from Parameter store and check if refresh needed."""
 
-    ssm = boto3.client('ssm')
+    ssm = boto3.client('ssm', region_name='eu-west-2')
 
     app_param = ssm.get_parameter(Name='stravaapiapp', WithDecryption=True)
     app = json.loads(app_param['Parameter']['Value'])
@@ -118,7 +118,7 @@ def generate_html(template_root, data):
 def send_email(to_address, from_address, title, body_data):
     """ Use SES to send email."""
 
-    ses = boto3.client('ses')
+    ses = boto3.client('ses', region_name='eu-west-2')
 
     res = ses.send_email(
         Destination={'ToAddresses': [to_address]},
