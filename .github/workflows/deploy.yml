@@ -17,16 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Test
-        run: |
-          pip install -r requirements.txt
-          pytest
+      - name: Install Test packages
+        run: pip install -r requirements.txt
 
-      - name: Install Lambda Dependancy
-        run: |
-          pip install requests -t ./
-          pip install Jinja2 -t ./
-          pip install css_inline -t ./
+      - name: Test
+        run: pytest
+
+      - name: Install Lambda packages
+        run: pip install -r requirements.txt
         working-directory: ./app
 
       - name: Zip Lambda package

@@ -13,7 +13,7 @@ class TestAccessToken:
         """ Should request a new token."""
 
         # Arrange
-        ssm = boto3.client("ssm")
+        ssm = boto3.client('ssm', 'eu-west-2')
         ssm.put_parameter(
             Name="stravaapiapp",
             Value=json.dumps(
@@ -45,7 +45,7 @@ class TestAccessToken:
         # Arrange
         access_token = "abc123"
 
-        ssm = boto3.client("ssm")
+        ssm = boto3.client('ssm', 'eu-west-2')
         ssm.put_parameter(
             Name="stravaapiapp",
             Value=json.dumps(
@@ -72,7 +72,7 @@ class TestAccessToken:
         # Arrange
         access_token = "abc123"
 
-        ssm = boto3.client("ssm")
+        ssm = boto3.client('ssm', 'eu-west-2')
         ssm.put_parameter(
             Name="stravaapiapp",
             Value=json.dumps(
@@ -163,7 +163,7 @@ class TestSendEmail:
         to_email = 'to@test.com'
         from_email = 'from@test.com'
 
-        ses = boto3.client("ses")
+        ses = boto3.client('ses', 'eu-west-2')
         ses.verify_email_identity(EmailAddress=to_email)
         ses.verify_email_identity(EmailAddress=from_email)
 
