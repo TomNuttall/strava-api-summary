@@ -7,86 +7,120 @@
   <style type="text/css">
     body {
       font-family: system-ui, Helvetica, Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 2em 0;
-    }
-
-    table {
-      width: 100%;
-      padding: 0 1em;
-    }
-
-    th {
-      text-align: left;
     }
 
     .content {
       max-width: 600px;
       margin: auto;
-      background-color: white;
+      background-color: #ededed;
     }
 
     .panel {
-      padding-bottom: 2em;
-      width: 100%;
+      padding: 2rem;
     }
 
     .panel__title {
-      background-color: black;
-      color: white;
-      font-size: 1.5em;
-      padding: 1em;
-      margin-top: 0em;
-      margin-bottom: 0.75em;
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
     }
 
-    .activities th {
-      padding-bottom: 0.5em;
+    .panel__subtitle {
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .panel__summary {
+      background-color: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem 2.5rem;
+    }
+
+    .panel__activity {
+      padding: 1rem;
+    }
+
+    p {
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+
+      border-spacing: 0;
+      table-layout: fixed;
+    }
+
+    table td,
+    th {
+      border-left: 1px solid #d9d9d9;
+      padding-left: 1rem;
+    }
+
+    th {
+      text-align: left;
+      font-weight: normal;
+      color: #9b8e8e;
+      padding-bottom: 0.5rem;
+    }
+
+    ul {
+      background-color: white;
+      border-radius: 0.75rem;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 1.5rem;
     }
   </style>
 
   <body>
     <div class="content">
       <div class="panel">
-        <p class="panel__title">Summary</p>
-        <table>
+        <h2 class="panel__title">Summary</h2>
+        <table class="panel__summary">
           <tr>
-            <th scope="row">Number of Activities</th>
+            <th>Number of Activities</th>
+            <th>Total Distance</th>
+            <th>Total Time</th>
+          </tr>
+          <tr>
             <td>{{ data.summary.count }}</td>
-          </tr>
-          <tr>
-            <th scope="row">Total Distance</th>
-            <td>{{ data.summary.total_distance|round(2) }}km</td>
-          </tr>
-          <tr>
-            <th scope="row">Total Time</th>
+            <td>{{ data.summary.total_distance|round(2) }} km</td>
             <td>{{ data.summary.total_time|round(2) }}</td>
           </tr>
         </table>
       </div>
 
-      <div class="panel activities">
-        <p class="panel__title">Activities</p>
-        <table>
-          <thead>
-            <th>Name</th>
-            <th>Time</th>
-            <th>Date</th>
-            <th>Distance</th>
-            <th>Duration</th>
-          </thead>
-          <tbody>
-            {% for activity in data.activities|reverse %}
-            <tr>
-              <td>{{ activity.name }}</td>
-              <td>{{ activity.date_time }}</td>
-              <td>{{ activity.date }}</td>
-              <td>{{ activity.distance|round(2) }}km</td>
-              <td>{{ activity.duration|round(2) }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <div class="panel">
+        <h2 class="panel__title">Activities</h2>
+        <ul>
+          {% for activity in data.activities|reverse %}
+          <li>
+            <h3 class="panel__subtitle">{{ activity.name }}</h3>
+            <p>{{ activity.date }} at {{ activity.date_time }}</p>
+            <table class="panel__activity">
+              <tr>
+                <th>Distance</th>
+                <th>Time</th>
+                <th>Pace</th>
+                <th>Heartrate</th>
+              </tr>
+              <tr>
+                <td>{{ activity.distance|round(2) }} km</td>
+                <td>{{ activity.duration|round(2) }}</td>
+                <td>{{ activity.avg_speed }}</td>
+                <td>{{ activity.avg_heartrate }} bpm</td>
+              </tr>
+            </table>
+          </li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
   </body>

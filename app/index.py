@@ -76,8 +76,11 @@ def scrape_api(access_token):
 
         res = {}
         res['name'] = activity['name']
+        res['type'] = activity['sport_type']
         res['distance'] = round(activity['distance'] / 1000, 2)
         res['duration'] = round(activity['elapsed_time'] / 60, 2)
+        res['avg_heartrate'] = activity['average_heartrate']
+        res['avg_speed'] = activity['average_speed']
 
         date_obj = dt.datetime.strptime(
             activity['start_date_local'], "%Y-%m-%dT%H:%M:%SZ")

@@ -110,7 +110,8 @@ class TestScrapeApi:
 
         activities = []
         activities.append({'name': 'Run', 'distance': 1000, 'elapsed_time': 60,
-                           'start_date_local': date_string})
+                           'start_date_local': date_string, 'sport_type': 'Run',
+                           'average_heartrate': 156, 'average_speed': 3})
 
         requests_mock.get(ACTIVITIES_URL,
                           json=activities,
@@ -143,8 +144,11 @@ class TestGenerateHTML:
         """ Should generate some html from data."""
 
         # Arrange
-        data = {'title': 'Runs', 'summary': {'count': 0,
-                                             'total_distance': 10, 'total_time': 0}, 'activities': []}
+        activities = []
+        activities.append({'name': 'Morning Run', 'type': 'Run', 'distance': 10,
+                           'duration': 1, 'avg_heartrate': 100, 'avg_speed': 1})
+        data = {'title': 'Runs', 'summary': {'count': 1,
+                                             'total_distance': 10, 'total_time': 1}, 'activities': activities}
 
         # Act
         title, body = generate_html('app', data)
