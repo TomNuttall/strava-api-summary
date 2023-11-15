@@ -18,3 +18,13 @@ Run scheduled lambda to call strava api and send a summary email.
 
 - CloudFormation templates used to deploy AWS infastructure
 - GitHub actions deploy lambda.
+
+## Design
+
+<img
+  src='../docs/design.svg'
+  raw=true
+  alt='Wireframe design'
+  height="500px"
+  width="auto"
+/>
