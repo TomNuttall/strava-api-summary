@@ -43,6 +43,20 @@
       padding: 1rem;
     }
 
+    @media only screen and (max-width: 600px) {
+      .panel {
+        padding: 1rem;
+      }
+
+      .panel__summary {
+        padding: 1.5rem 1.5rem;
+      }
+
+      .panel__activity {
+        padding: 0rem;
+      }
+    }
+
     p {
       margin-top: 0;
     }
@@ -85,9 +99,9 @@
         <h2 class="panel__title">Summary</h2>
         <table class="panel__summary">
           <tr>
-            <th>Number of Activities</th>
-            <th>Total Distance</th>
-            <th>Total Time</th>
+            <th>Activities</th>
+            <th>Distance</th>
+            <th>Time</th>
           </tr>
           <tr>
             <td>{{ data.summary.count }}</td>
