@@ -84,7 +84,7 @@ def scrape_api(access_token):
 
         date_obj = dt.datetime.strptime(
             activity['start_date_local'], "%Y-%m-%dT%H:%M:%SZ")
-        res['date'] = date_obj.strftime("%d/%m/%Y")
+        res['date'] = date_obj.strftime("%d %B %Y")
         res['date_time'] = date_obj.strftime("%H:%M")
 
         return res
@@ -114,7 +114,7 @@ def generate_html(template_root, data):
         f'{template_root}/templates/'), autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template('email.html')
 
-    body = css_inline.inline(template.render(data=data))
+    body = css_inline.inline(template.render(data=data), keep_style_tags=True)
     return data['title'], body
 
 

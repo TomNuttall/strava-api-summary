@@ -146,7 +146,8 @@ class TestGenerateHTML:
         # Arrange
         activities = []
         activities.append({'name': 'Morning Run', 'type': 'Run', 'distance': 10,
-                           'duration': 1, 'avg_heartrate': 100, 'avg_speed': 1})
+                           'duration': 1, 'avg_heartrate': 100, 'avg_speed': 1,
+                           'date': '15 November 2023', 'date_time': '12:00'})
         data = {'title': 'Runs', 'summary': {'count': 1,
                                              'total_distance': 10, 'total_time': 1}, 'activities': activities}
 
