@@ -8,7 +8,7 @@ Run scheduled lambda to call strava api and send a summary email.
 
 ## 🛠️ AWS Lambda
 
-> :book: [Lambda Readme](lambda/README.md)
+> :book: [Lambda Readme](app/README.md)
 
 - Lambda querys strava api and sends an email summary
 
