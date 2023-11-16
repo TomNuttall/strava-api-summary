@@ -6,11 +6,12 @@ Run scheduled lambda to call strava api and send a summary email.
 
 > :book: [Integrating with the Strava API](https://levelup.gitconnected.com/integrating-with-the-strava-api-40244b17df2c)
 
-## 🛠️ AWS Lambda
+## 🛠️ App
 
-> :book: [Lambda Readme](app/README.md)
+> :book: [App Readme](app/README.md)
+> :book: [Tests Readme](tests/README.md)
 
-- Lambda querys strava api and sends an email summary
+- AWS Lambda querys stravas api and sends an email summary
 
 ## :bricks: Infastructure
 
