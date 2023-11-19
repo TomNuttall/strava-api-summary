@@ -3,7 +3,7 @@
 ## Overview
 
 - CloudFormation templates used to deploy infastructure on AWS.
-- GitHub action runs on push to main branch.
+- GitHub action runs on push to main branch and change in app or tests folder.
   - Runs lambda unit tests, builds lambda package then deploys.
 
 ## Architecture Diagram
