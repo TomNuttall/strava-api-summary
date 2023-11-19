@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'app/**'
-      - 'tests/**'
 
 jobs:
   build:
@@ -18,7 +17,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name:
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' # caching pip dependencies
 
       - name: Install Test packages
         run: pip install -r ./tests/requirements.txt
@@ -35,7 +40,7 @@ jobs:
         working-directory: ./app
 
       - name: Configure AWS Credentials for Lambda Access
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_LAMBDA_ROLE }}
           role-duration-seconds: 900
