@@ -12,19 +12,22 @@ with Diagram("", filename="aws_architecture-diagram", outformat="png"):
     strava_api = SDK("Strava Api")
 
     with Cluster("AWS"):
-        event = Eventbridge("EventBridge")
-        lambda_function = Lambda("Lambda")
         iam_role = IAM("IAM")
 
-        event >> Edge(label="Run schedule once a week") >> lambda_function
+        with Cluster(""):
+            event = Eventbridge("EventBridge")
+            lambda_function = Lambda("Lambda")
 
-        lambda_function >> Edge(
-            label="Store / Retrive access token") >> KMS("KMS") >> ParameterStore("ParameterStore")
-        lambda_function >> Edge(label="Send stats summary") >> SES("SES")
-        lambda_function >> Edge(label="Logging") >> Cloudwatch("CloudWatch")
+            event >> Edge(label="Run schedule once a week") >> lambda_function
 
-        lambda_function >> Edge(
-            label="Request access token / athlete data") >> strava_api
+            lambda_function >> Edge(
+                label="Store / Retrive access token") >> KMS("KMS") >> Edge() << ParameterStore("ParameterStore")
+            lambda_function >> Edge(label="Send stats summary") >> SES("SES")
+            lambda_function >> Edge(
+                label="Logging") >> Cloudwatch("CloudWatch")
+
+            lambda_function >> Edge(
+                label="Request access token / athlete data") >> strava_api
 
     github_action >> Edge(label="Deploys lambda code") >> lambda_function
     github_action >> Edge(label="Gets lambda role") >> iam_role
