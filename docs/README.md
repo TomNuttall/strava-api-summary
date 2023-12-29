@@ -8,13 +8,16 @@ Install graphvis
 brew install graphviz
 ```
 
+VirtualEnv
+
+```bash
+python3 -m venv env
+source env/bin/activate
+```
+
 Install diagrams package
 
 ```bash
-pip3 install virtualenv
-python3 -m venv env
-source env/bin/activate
-
 pip install diagrams
 ```
 
