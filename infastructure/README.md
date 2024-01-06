@@ -12,8 +12,8 @@
   src='../docs/aws_architecture-diagram.png'
   raw=true
   alt='AWS Architecture Diagram'
-  height="500px"
-  width="auto"
+  width="100%"
+  height="auto"
 />
 
 ### Parameter Store
