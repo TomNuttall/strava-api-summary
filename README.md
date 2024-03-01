@@ -1,6 +1,6 @@
 # Strava API Demo Project
 
-Run scheduled lambda to call strava api and send a summary email.
+Demo Project: Runs a weekly lambda to call the Strava API and send an activity summary email.
 
 ## Strava API
 
