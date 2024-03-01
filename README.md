@@ -1,6 +1,6 @@
 # Strava API Demo Project
 
-Demo Project: Runs a weekly lambda to call the Strava API and send an activity summary email.
+Demo Project: Runs a weekly Lambda to call the Strava API and send an activity summary email.
 
 ## Strava API
 
