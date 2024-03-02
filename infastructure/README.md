@@ -9,7 +9,7 @@
 ## Architecture Diagram
 
 <img
-  src='../docs/aws_architecture-diagram.png'
+  src='../diagrams/aws_architecture-diagram.png'
   raw=true
   alt='AWS Architecture Diagram'
   width="100%"

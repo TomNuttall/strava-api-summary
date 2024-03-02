@@ -23,7 +23,7 @@ Run scheduled lambda to call strava api and send a summary email.
 ## Design
 
 <img
-  src='./docs/design.svg'
+  src='./diagrams/design.svg'
   raw=true
   alt='Wireframe design'
   height="500px"
