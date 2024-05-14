@@ -6,8 +6,8 @@ Demo Project: Run a weekly Lambda to call the Strava API and send an activity su
   src='./diagrams/design.svg'
   raw=true
   alt='Wireframe design'
-  height="500px"
   width="auto"
+  height="400px"
 />
 
 ## Project Overview
