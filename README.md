@@ -30,4 +30,10 @@ Demo Project: Run a weekly Lambda to call the Strava API and send an activity su
 - CloudFormation templates used to deploy AWS infastructure
 - GitHub actions deploy lambda.
 
+## Run
+
+```
+run
+```
+
 
