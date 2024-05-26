@@ -1,0 +1,53 @@
+name: Build + Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/src/**'
+      - 'app/tests/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' # caching pip dependencies
+
+      - name: Install Test packages
+        run: pip install -r ./tests/requirements.txt
+        working-directory: ./app
+
+      - name: Test
+        run: pytest
+        working-directory: ./app/tests
+
+      - name: Install Lambda packages
+        run: pip install -r ./src/requirements.txt -t ./
+        working-directory: ./app
+
+      - name: Zip Lambda package
+        run: zip -r ../lambda_package.zip ./src
+        working-directory: ./app
+
+      - name: Configure AWS Credentials for Lambda Access
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_LAMBDA_ROLE }}
+          role-duration-seconds: 900
+          aws-region: eu-west-2
+
+      - name: Deploy lambda
+        run: aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA }} --zip-file fileb://lambda_package.zip
