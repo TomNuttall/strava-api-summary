@@ -1,27 +1,27 @@
+import datetime as dt
 from functools import reduce
 from dataclasses import dataclass
 from .StravaAPI import DetailedActivity
-import datetime as dt
 
 
 @dataclass
 class Activity:
-    id: int
-    name: str
-    type: str
-    distance: float
-    duration: float
-    avg_heartrate: int
-    avg_speed: int
-    date: str
-    date_time: str
+    id: int = 0
+    name: str = ''
+    type: str = ''
+    distance: float = 0.0
+    duration: float = 0.0
+    avg_heartrate: int = 0
+    avg_speed: int = 0
+    date: str = ''
+    date_time: str = ''
 
 
 @dataclass
 class Summary:
-    count: int
-    total_time: float
-    total_distance: float
+    count: int = 0
+    total_time: float = 0.0
+    total_distance: float = 0.0
 
 
 class Transformer:
@@ -31,14 +31,14 @@ class Transformer:
 
         activities = list(map(self.__transform_activity, data))
         summary = reduce(self.__reduce_summary,
-                         activities, Summary(0, 0.0, 0.0))
+                         activities, Summary())
 
         return summary, activities
 
     def __transform_activity(self, activity: DetailedActivity) -> Activity:
         """ Transform activity to pull out relevant info."""
 
-        res = Activity(0, '', '', 0.0, 0.0, 0, 0, '', dt.datetime.now())
+        res = Activity()
         res.id = activity.id
         res.name = activity.name
         res.type = activity.sport_type
