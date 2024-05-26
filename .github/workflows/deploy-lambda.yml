@@ -39,7 +39,7 @@ jobs:
         working-directory: ./app/src
 
       - name: Zip Lambda package
-        run: zip -r ../lambda_package.zip *.py modules/*.py templates/*.html
+        run: zip -r ../../lambda_package.zip *.py modules/*.py templates/*.html
         working-directory: ./app/src
 
       - name: Configure AWS Credentials for Lambda Access
