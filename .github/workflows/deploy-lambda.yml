@@ -27,20 +27,20 @@ jobs:
           cache: 'pip' # caching pip dependencies
 
       - name: Install Test packages
-        run: pip install -r ./tests/requirements.txt
-        working-directory: ./app
+        run: pip install -r ./requirements.txt
+        working-directory: ./app/tests
 
       - name: Test
         run: pytest
         working-directory: ./app/tests
 
       - name: Install Lambda packages
-        run: pip install -r ./src/requirements.txt -t ./
-        working-directory: ./app
+        run: pip install -r ./requirements.txt -t ./
+        working-directory: ./app/src
 
       - name: Zip Lambda package
-        run: zip -r ../lambda_package.zip ./src
-        working-directory: ./app
+        run: zip -r ../lambda_package.zip *.py modules/*.py templates/*.html
+        working-directory: ./app/src
 
       - name: Configure AWS Credentials for Lambda Access
         uses: aws-actions/configure-aws-credentials@v4

@@ -6,7 +6,7 @@ from modules.StravaAuth import StravaAuth
 from modules.StravaAPI import StravaAPI
 from modules.Transformer import Transformer
 
-emailTemplate = EmailTemplate(os.environ.get("LAMBDA_TASK_ROOT", "./modules"))
+emailTemplate = EmailTemplate(os.environ.get("LAMBDA_TASK_ROOT", "./"))
 mailer = Mailer(os.environ.get('TARGET_EMAIL'))
 stravaAPI = StravaAPI(StravaAuth())
 transformer = Transformer()
