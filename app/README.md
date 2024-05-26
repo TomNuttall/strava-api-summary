@@ -10,3 +10,4 @@
 ### Example
 
 [Activity Response](https://developers.strava.com/docs/reference/#api-models-DetailedActivity)
+

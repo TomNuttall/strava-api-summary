@@ -19,7 +19,6 @@ Demo Project: Run a weekly Lambda to call the Strava API and send an activity su
 ### 🛠️ App
 
 > :book: [App Readme](app/README.md)
-> :book: [Tests Readme](tests/README.md)
 
 - AWS Lambda querys stravas api and sends an email summary
 
@@ -28,12 +27,11 @@ Demo Project: Run a weekly Lambda to call the Strava API and send an activity su
 > :book: [Infastructure Readme](infastructure/README.md)
 
 - CloudFormation templates used to deploy AWS infastructure
-- GitHub actions deploy lambda.
+- GitHub actions deploy lambda and image assets.
 
 ## Run
 
 ```
-run
+cd app/src
+python index.py
 ```
-
-
