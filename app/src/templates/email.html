@@ -8,6 +8,7 @@
     body {
       font-family: system-ui, Helvetica, Arial, sans-serif;
       font-size: 16px;
+      color: #2B303A;
     }
 
     .content {
@@ -150,11 +151,13 @@
             </p>
             <table class="panel__activity">
               <tr>
+                <th>Type</th>
                 <th>Distance</th>
                 <th>Time</th>
                 <th>Heartrate</th>
               </tr>
               <tr>
+                <td>{{ activity.type }}</td>
                 <td>{{ activity.distance|round(2) }} km</td>
                 <td>{{ activity.duration|round(2) }}</td>
                 <td>{{ activity.avg_heartrate }} bpm</td>
