@@ -1,7 +1,7 @@
 import datetime as dt
 from functools import reduce
 from dataclasses import dataclass
-from .StravaAPI import DetailedActivity
+from modules.StravaAPI import DetailedActivity
 
 
 @dataclass

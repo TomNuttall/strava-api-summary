@@ -18,7 +18,7 @@ class Controller:
         self.mailer = mailer
         self.emailTemplate = emailTemplate
 
-    def scrapeAPI(self, send_to_email: str):
+    def handler(self, send_to_email: str):
         """ Get last 7 days of activities from strava api."""
 
         to_date_obj = dt.datetime.now()
@@ -28,10 +28,11 @@ class Controller:
         if status_code != 200:
             return
 
-        data = EmailSummary('', [], {})
+        data = EmailSummary()
         from_date_str = Helpers.date_ordinal(from_date_obj.strftime("%d %b"))
         to_date_str = Helpers.date_ordinal(to_date_obj.strftime("%d %b"))
         data.date = f'{from_date_str} - {to_date_str}'
+
         data.summary, data.activities = self.transformer.transformActivities(
             res_data)
 

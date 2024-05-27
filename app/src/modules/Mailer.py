@@ -31,4 +31,4 @@ class Mailer:
             },
             Source=self.from_address)
 
-        return res
+        return res['ResponseMetadata']['HTTPStatusCode']

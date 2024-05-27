@@ -1,0 +1,5 @@
+{
+  "python.testing.cwd": "${workspaceFolder}/app/src",
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true
+}

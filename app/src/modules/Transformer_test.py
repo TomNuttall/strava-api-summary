@@ -1,6 +1,5 @@
-import datetime as dt
-from src.modules.StravaAPI import DetailedActivity
-from src.modules.Transformer import Transformer, Summary, Activity
+from modules.StravaAPI import DetailedActivity
+from modules.Transformer import Transformer, Summary, Activity
 
 transformer = Transformer()
 

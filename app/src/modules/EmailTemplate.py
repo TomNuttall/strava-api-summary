@@ -1,14 +1,14 @@
+from modules.Transformer import Activity, Summary
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import css_inline
-from .Transformer import Activity, Summary
 
 
 @dataclass
 class EmailSummary:
-    date: str
-    activities: list[Activity]
-    summary: Summary
+    date: str = ''
+    activities: list[Activity] = field(default_factory=list)
+    summary: Summary = field(default_factory=Summary)
 
 
 class EmailTemplate:
@@ -16,7 +16,7 @@ class EmailTemplate:
     def __init__(self, template_root: str, template_name='email.html'):
         """ Setup template."""
 
-        env = Environment(loader=FileSystemLoader(f'{template_root}/templates/'),
+        env = Environment(loader=FileSystemLoader(template_root),
                           autoescape=select_autoescape(['html', 'xml']))
         self.template = env.get_template(template_name)
 

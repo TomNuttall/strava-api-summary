@@ -1,4 +1,4 @@
-import src.modules.Helpers as Helpers
+import Helpers as Helpers
 
 
 def test_date_ordinal_short():

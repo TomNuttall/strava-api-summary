@@ -6,7 +6,7 @@ from modules.StravaAuth import StravaAuth
 from modules.StravaAPI import StravaAPI
 from modules.Transformer import Transformer
 
-emailTemplate = EmailTemplate(os.environ.get("LAMBDA_TASK_ROOT", "./"))
+emailTemplate = EmailTemplate(f'./templates/')
 mailer = Mailer(os.environ.get('TARGET_EMAIL'))
 stravaAPI = StravaAPI(StravaAuth())
 transformer = Transformer()
@@ -16,7 +16,7 @@ controller = Controller(stravaAPI, transformer, mailer, emailTemplate)
 def lambda_handler(event, context):
     """ ."""
 
-    controller.scrapeAPI(os.environ.get('SEND_EMAIL'))
+    controller.handler(os.environ.get('SEND_EMAIL'))
 
     return {
         'statusCode': 200,

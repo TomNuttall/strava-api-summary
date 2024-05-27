@@ -1,6 +1,6 @@
 import boto3
+from modules.Mailer import Mailer
 from moto import mock_aws
-from src.modules.Mailer import Mailer
 
 from_email = 'from@test.com'
 
@@ -22,7 +22,7 @@ def test_send_email():
     res = mailer.sendEmail(to_email, 'Title', '<p>Content</p>')
 
     # Assert
-    assert res['ResponseMetadata']['HTTPStatusCode'] == 200
+    assert res == 200
 
 
 @mock_aws

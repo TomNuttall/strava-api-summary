@@ -2,7 +2,7 @@ import boto3
 import json
 import time
 import requests
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 AUTH_URL = 'https://www.strava.com/oauth/token'
 
@@ -12,18 +12,18 @@ SAVED_AUTH_TOKEN = 'stravaapitoken'
 
 @dataclass
 class AuthRequest:
-    client_id: int
-    client_secret: str
-    code: str
-    grant_type: str
-    refresh_token: str
+    client_id: int = 0
+    client_secret: str = ''
+    grant_type: str = ''
+    code: str = None
+    refresh_token: str = None
 
 
 @dataclass
 class AuthResponse:
-    expires_at: int
-    refresh_token: str
-    access_token: str
+    expires_at: int = 0
+    refresh_token: str = ''
+    access_token: str = ''
 
 
 class StravaAuth:
@@ -43,15 +43,20 @@ class StravaAuth:
     def getAuthToken(self) -> str:
         """ Wrap auth token refresh login."""
 
-        params = AuthRequest(
-            self.app['client_code'], self.app['client_secret'], self.app['code'], None, self.api_token.get('refresh_token'))
+        expires_at = self.api_token.get('expires_at')
+        params = AuthRequest()
 
-        if not self.api_token.get('expires_at'):
+        if not expires_at:
             params.grant_type = 'authorization_code'
-        elif time.time() > self.api_token.get('expires_at'):
+            params.code = self.app['code']
+        elif time.time() > expires_at:
             params.grant_type = 'refresh_token'
+            params.refresh_token = self.api_token.get('refresh_token')
 
         if params.grant_type:
+            params.client_id = self.app['client_code']
+            params.client_secret = self.app['client_secret']
+
             status_code, res_data = self.__requestAuthToken(params)
             if status_code == 200:
                 self.api_token['expires_at'] = res_data.expires_at
@@ -66,16 +71,14 @@ class StravaAuth:
     def __requestAuthToken(self, req: AuthRequest) -> tuple[int, AuthResponse]:
         """ API auth request."""
 
-        params = {'client_id': req.client_id,
-                  'client_secret': req.client_secret,
-                  'grant_type': req.grant_type}
-
-        if req.grant_type == 'authorization_code':
-            params['code'] = req.code
-        if req.grant_type == 'refresh_token':
-            params['refresh_token'] = req.refresh_token
-
+        params = dict(filter(lambda x: x[1] != None, asdict(req).items()))
         res = requests.post(AUTH_URL, params)
 
-        data = res.json()
-        return res.status_code, AuthResponse(expires_at=data['expires_at'], refresh_token=data['refresh_token'], access_token=data['access_token'])
+        return res.status_code, self.__parse_response(res.json())
+
+    def __parse_response(self, raw_data: dict) -> AuthResponse:
+        """ ."""
+
+        data = dict(
+            filter(lambda x: AuthResponse.__annotations__.get(x[0]), raw_data.items()))
+        return AuthResponse(**data)

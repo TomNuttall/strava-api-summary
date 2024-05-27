@@ -1,7 +1,8 @@
 import requests
 import datetime as dt
+from modules.StravaAuth import StravaAuth
 from dataclasses import dataclass
-from .StravaAuth import StravaAuth
+
 
 ACTIVITIES_URL = 'https://www.strava.com/api/v3/athlete/activities'
 
@@ -16,16 +17,6 @@ class DetailedActivity:
     average_heartrate: float
     average_speed: float
     start_date_local: str
-
-    def __init__(self, *args, **kwargs):
-        self.id = kwargs['id']
-        self.name = kwargs['name']
-        self.sport_type = kwargs['sport_type']
-        self.distance = kwargs['distance']
-        self.elapsed_time = kwargs['elapsed_time']
-        self.average_heartrate = kwargs['average_heartrate']
-        self.average_speed = kwargs['average_speed']
-        self.start_date_local = kwargs['start_date_local']
 
 
 class StravaAPI:
@@ -42,5 +33,12 @@ class StravaAPI:
         res = requests.get(f'{ACTIVITIES_URL}?after={dt.datetime.timestamp(from_date_obj)}',
                            params={'access_token': access_token})
 
-        data = list(map(lambda item: DetailedActivity(**item), res.json()))
+        data = list(map(self.__parse_response, res.json()))
         return res.status_code, data
+
+    def __parse_response(self, raw_data: dict) -> DetailedActivity:
+        """ ."""
+
+        data = dict(
+            filter(lambda x: DetailedActivity.__annotations__.get(x[0]), raw_data.items()))
+        return DetailedActivity(**data)

@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
-from src.modules.EmailTemplate import EmailTemplate, EmailSummary
-from src.modules.Transformer import Activity, Summary
+from modules.EmailTemplate import EmailTemplate, EmailSummary
+from modules.Transformer import Summary, Activity
 
 
-emailTemplate = EmailTemplate('../src')
+emailTemplate = EmailTemplate('./templates/')
 
 
 def test_generate_html():
