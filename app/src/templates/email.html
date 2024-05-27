@@ -56,21 +56,29 @@
       border-radius: 50%;
       text-align: center; 
       vertical-align: middle;
-      font-weight: 700;
-      font-size: 1.1rem;
     }
 
     .panel__activity-highlight { 
       background-color: #F0E100;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
 
     .panel__distance-highlight {
       background-color: #731963;
       color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
 
     .panel__time-highlight {
       background-color: #CBD2D0;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .panel__sport-highlight {
+      background-color: #F0E100;
     }
 
     .panel__summary-text {
@@ -133,14 +141,14 @@
               {{ activity.date }} at {{ activity.date_time }}
             </p>
             <table class="panel__activity">
-              <tr>
-                <th>Type</th>
+              <!-- <tr>
+                <th></th>
                 <th>Distance</th>
                 <th>Time</th>
                 <th>Heartrate</th>
-              </tr>
+              </tr> -->
               <tr>
-                <td>{{ activity.type }}</td>
+                <td class="panel__circle panel__sport-highlight">{{ activity.type }}</td>
                 <td>{{ activity.distance|round(2) }} km</td>
                 <td>{{ activity.duration|round(2) }}</td>
                 <td>{{ activity.avg_heartrate }} bpm</td>
