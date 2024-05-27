@@ -26,8 +26,8 @@ jobs:
           python-version: '3.11'
           cache: 'pip' # caching pip dependencies
           cache-dependency-path: |
-            'app/requirements-dev.txt'
-            'app/requirements-prod.txt'
+            '**/requirements-dev.txt'
+            '**/requirements-prod.txt'
 
       - name: Install Test packages
         run: pip install -r ./requirements-dev.txt
