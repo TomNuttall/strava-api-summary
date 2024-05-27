@@ -27,7 +27,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
           cache-dependency-path: |
             'app/requirements-dev.txt'
-            'app/requirements.txt'
+            'app/requirements-prod.txt'
 
       - name: Install Test packages
         run: pip install -r ./requirements-dev.txt
