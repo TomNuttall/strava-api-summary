@@ -15,7 +15,6 @@ class DetailedActivity:
     distance: float
     elapsed_time: int
     average_heartrate: float
-    average_speed: float
     start_date_local: str
 
 

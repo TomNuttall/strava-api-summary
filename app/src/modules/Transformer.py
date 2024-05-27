@@ -12,7 +12,6 @@ class Activity:
     distance: float = 0.0
     duration: float = 0.0
     avg_heartrate: int = 0
-    avg_speed: int = 0
     date: str = ''
     date_time: str = ''
 
@@ -45,7 +44,6 @@ class Transformer:
         res.distance = round(activity.distance / 1000, 2)
         res.duration = round(activity.elapsed_time / 60, 2)
         res.avg_heartrate = activity.average_heartrate
-        res.avg_speed = activity.average_speed
 
         date_obj = dt.datetime.strptime(
             activity.start_date_local, "%Y-%m-%dT%H:%M:%SZ")
