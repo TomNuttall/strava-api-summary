@@ -1,9 +1,9 @@
 import datetime as dt
 import modules.Helpers as Helpers
-from modules.EmailTemplate import EmailTemplate, EmailSummary
+from modules.EmailTemplate import EmailTemplate
 from modules.Mailer import Mailer
-from modules.StravaAPI import StravaAPI
 from modules.Transformer import Transformer
+from strava.StravaAPI import StravaAPI
 
 DATE_RANGE = 7
 
@@ -18,7 +18,7 @@ class Controller:
         self.mailer = mailer
         self.emailTemplate = emailTemplate
 
-    def handler(self, send_to_email: str):
+    def handler(self, athlete_id: int, send_to_email: str):
         """ Get last 7 days of activities from strava api."""
 
         to_date_obj = dt.datetime.now()
@@ -28,13 +28,11 @@ class Controller:
         if status_code != 200:
             return
 
-        data = EmailSummary()
         from_date_str = Helpers.date_ordinal(from_date_obj.strftime("%d %b"))
         to_date_str = Helpers.date_ordinal(to_date_obj.strftime("%d %b"))
-        data.date = f'{from_date_str} - {to_date_str}'
 
-        data.summary, data.activities = self.transformer.transformActivities(
-            res_data)
+        data = self.transformer.transformActivities(
+            res_data, athlete_id, f'{from_date_str} - {to_date_str}')
 
         body = self.emailTemplate.generateHTML(data)
         res = self.mailer.sendEmail(send_to_email, 'Weekly Report', body)

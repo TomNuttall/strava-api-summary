@@ -14,152 +14,128 @@
     .content {
       max-width: 600px;
       margin: auto;
+      background-color: #FFF8F0;
     }
 
-    .panel {
-      margin-top: 1rem;
-      margin-bottom: 1.5rem;
+    .summary {
+      padding-top: 3rem;
     }
 
-    .panel__summary {
-      border-radius: 0.5rem;
-      border: 2px #d9d9d9 solid;
-      padding: 1.5rem 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .panel__activity {
-      padding: 1rem;
-    }
-
-    .panel__title {
+    .summary__title {
       text-align: center;
-      font-size: 1.2rem;
+      font-size: 2rem;
       font-weight: 600;
       margin-top: 0;
       margin-bottom: 0.5rem;
     }
 
-    .panel__subtitle {
+    .summary__subtitle {
       text-align: center;
-      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
     }
 
-    .panel__link {
-      text-align: center;
-      width: 100%;
+    .overview {
+      padding: 3.5rem 0 2rem 1.5rem;
+      background-color: #FF8811;
     }
 
-    .panel__circle {
-      width: 3.5rem;
-      height: 3.5rem;
+    .overview__text {
+      font-size: 1.1rem;
+      font-weight: 400;
+      padding-bottom: 0.25rem;
+    }
+
+    .overview__value {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .activities {
+      padding: 2rem 0 2rem 1.5rem;
+      background-color: #9DD9D2;
+    }
+
+    .activities__icon {
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: 50%;
       text-align: center; 
       vertical-align: middle;
-    }
-
-    .panel__activity-highlight { 
-      background-color: #F0E100;
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    .panel__distance-highlight {
-      background-color: #731963;
+      background-color: #392F5A;
       color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
     }
 
-    .panel__time-highlight {
-      background-color: #CBD2D0;
-      font-weight: 700;
-      font-size: 1.1rem;
+    .profile {
+      text-align: center;
+      padding-top: 4rem;
+      padding-bottom: 5rem;
     }
 
-    .panel__sport-highlight {
-      background-color: #F0E100;
-    }
-
-    .panel__summary-text {
-      padding-left: 1rem;
+    .profile__button {
+      border-radius: 0.25rem;
+      padding: 0.75rem 3rem;
+      text-decoration: none;
+      background-color: #392F5A;
+      color: white;
     }
 
     p {
       margin-top: 0;
-    }
+      margin-bottom: 0;
+    } 
 
     table {
       width: 100%;
       border-spacing: 0;
       table-layout: fixed;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    @media only screen and (max-width: 600px) {
-      .panel {
-        padding: 1rem !important;
-      }
-
-      .panel__summary {
-        padding: 1.5rem 1.5rem !important;
-      }
-
-      .panel__activity {
-        padding: 0.5rem !important;
-      }
-    }
+    } 
   </style>
 
   <body>
     <div class="content">
-      <div class="panel">
-        <h2 class="panel__title">Weekly Report</h2>
-        <p class="panel__subtitle">{{ data.date }}</p>
-        <table class="panel__summary">
+      <div class="summary">
+        <h2 class="summary__title">Weekly Report</h2>
+        <p class="summary__subtitle">{{ data.date }}</p>
+      </div>
+
+      <div class="overview">
+        <table>
           <tr>
-            <td class="panel__circle panel__activity-highlight">{{ data.summary.count }}</td>
-            <td class="panel__summary-text">Activity</td>
-            <td class="panel__circle panel__distance-highlight">{{ data.summary.total_distance|round(2) }}</td>
-            <td class="panel__summary-text">Distance (km)</td>
-            <td class="panel__circle panel__time-highlight">{{ data.summary.total_time|round(2) }}</td>
-            <td class="panel__summary-text">Time</td>
+            <td>
+              <p class="overview__text">Activities</p>
+              <p class="overview__value">{{ data.summary.count }}</p>    
+            </td>
+            <td>
+              <p class="overview__text">Distance</p>
+              <p class="overview__value">{{ data.summary.total_distance|round(2) }} km</p>  
+            </td>
+            <td>
+              <p class="overview__text">Time</p>
+              <p class="overview__value">{{ (data.summary.total_time / 60)|round|int }}:{{ '%02d' %
+                (data.summary.total_time % 60) |round|int }}</p>  
+            </td>
           </tr>
         </table>
       </div>
 
-      <div class="panel">
-        <ul>
+      <div class="activities">
+        <table>
           {% for activity in data.activities|reverse %}
-          <li class="panel__summary">
-            <h3 class="panel__title">{{ activity.name }}</h3>
-            <p class="panel__subtitle">
-              {{ activity.date }} at {{ activity.date_time }}
-            </p>
-            <table class="panel__activity">
-              <!-- <tr>
-                <th></th>
-                <th>Distance</th>
-                <th>Time</th>
-                <th>Heartrate</th>
-              </tr> -->
-              <tr>
-                <td class="panel__circle panel__sport-highlight">{{ activity.type }}</td>
-                <td>{{ activity.distance|round(2) }} km</td>
-                <td>{{ activity.duration|round(2) }}</td>
-                <td>{{ activity.avg_heartrate }} bpm</td>
-              </tr>
-            </table>
-            <div class="panel__link">
-              <a class="panel__button" href=https://www.strava.com/activities/{{ activity.id }}>View Activity</a>
-            </div>
-          </li>
+          <tr>
+            <td class="activities__icon">M</td>
+            <td>{{ activity.date_time }}</td>
+            <td>{{ activity.type }}</td>
+            <td>{{ activity.distance|round(2) }} km</td>
+            <td>{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
+            <td>{{ activity.avg_heartrate }} bpm</td>
+          </tr>
           {% endfor %}
-        </ul>
+        </table>
+      </div>
+
+      <div class="profile">
+        <a class="profile__button" href=https://www.strava.com/athletes/{{ data.athlete_id }}>View Strava Profile</a>
       </div>
     </div>
   </body>

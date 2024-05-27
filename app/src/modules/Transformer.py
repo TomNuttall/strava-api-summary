@@ -1,7 +1,7 @@
 import datetime as dt
 from functools import reduce
-from dataclasses import dataclass
-from modules.StravaAPI import DetailedActivity
+from dataclasses import dataclass, field
+from strava.StravaAPI import DetailedActivity
 
 
 @dataclass
@@ -23,16 +23,27 @@ class Summary:
     total_distance: float = 0.0
 
 
+@dataclass
+class EmailTemplateData:
+    athlete_id: int = 0
+    date: str = ''
+    activities: list[Activity] = field(default_factory=list)
+    summary: Summary = field(default_factory=Summary)
+
+
 class Transformer:
 
-    def transformActivities(self, data: list[DetailedActivity]) -> tuple[list[Activity], Summary]:
+    def transformActivities(self, data: list[DetailedActivity], athlete_id: int, date: str) -> EmailTemplateData:
         """ Transfrom DetailedActivity list."""
 
-        activities = list(map(self.__transform_activity, data))
-        summary = reduce(self.__reduce_summary,
-                         activities, Summary())
+        res = EmailTemplateData()
 
-        return summary, activities
+        res.athlete_id = athlete_id
+        res.date = date
+        res.activities = list(map(self.__transform_activity, data))
+        res.summary = reduce(self.__reduce_summary, res.activities, Summary())
+
+        return res
 
     def __transform_activity(self, activity: DetailedActivity) -> Activity:
         """ Transform activity to pull out relevant info."""

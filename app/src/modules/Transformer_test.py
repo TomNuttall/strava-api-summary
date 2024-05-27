@@ -1,4 +1,4 @@
-from modules.StravaAPI import DetailedActivity
+from strava.StravaAPI import DetailedActivity
 from modules.Transformer import Transformer, Summary, Activity
 
 transformer = Transformer()
@@ -15,10 +15,10 @@ def test_transformActivites():
                                  elapsed_time=3600, average_heartrate=100.0, start_date_local="2024-01-02T09:00:00Z"))
 
     # Act
-    summary, activities = transformer.transformActivities(data)
+    res = transformer.transformActivities(data, 0, '')
 
     # Assert
-    assert summary == Summary(
+    assert res.summary == Summary(
         count=2, total_distance=2.0, total_time=120.0)
-    assert activities[0] == Activity(
+    assert res.activities[0] == Activity(
         1, "Morning Run", "Run", 1.0, 60.0, 100.0, "Monday", "09:00")

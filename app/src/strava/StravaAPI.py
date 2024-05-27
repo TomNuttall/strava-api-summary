@@ -1,6 +1,6 @@
 import requests
 import datetime as dt
-from modules.StravaAuth import StravaAuth
+from strava.StravaAuth import StravaAuth
 from dataclasses import dataclass
 
 

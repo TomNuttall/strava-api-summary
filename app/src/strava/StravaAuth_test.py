@@ -2,7 +2,7 @@ import boto3
 import json
 import time
 import requests
-from modules.StravaAuth import StravaAuth, SAVED_APP_TOKEN, SAVED_AUTH_TOKEN, AUTH_URL
+from strava.StravaAuth import StravaAuth, SAVED_APP_TOKEN, SAVED_AUTH_TOKEN, AUTH_URL
 from moto import mock_aws
 
 

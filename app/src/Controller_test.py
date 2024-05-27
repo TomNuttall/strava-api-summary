@@ -1,15 +1,14 @@
 import boto3
 import json
 import time
-import logging
 from moto import mock_aws
 
 from Controller import Controller
 from modules.EmailTemplate import EmailTemplate
 from modules.Mailer import Mailer
-from modules.StravaAuth import StravaAuth, AUTH_URL, SAVED_APP_TOKEN, SAVED_AUTH_TOKEN
-from modules.StravaAPI import StravaAPI, ACTIVITIES_URL
 from modules.Transformer import Transformer
+from strava.StravaAuth import StravaAuth, AUTH_URL, SAVED_APP_TOKEN, SAVED_AUTH_TOKEN
+from strava.StravaAPI import StravaAPI, ACTIVITIES_URL
 
 
 @mock_aws
@@ -56,7 +55,7 @@ def test_handler(requests_mock):
     controller = Controller(stravaAPI, transformer, mailer, emailTemplate)
 
     # Act
-    res = controller.handler('to@test.com')
+    res = controller.handler(1, 'to@test.com')
 
     # Assert
     assert res == 200

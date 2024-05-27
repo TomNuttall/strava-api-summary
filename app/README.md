@@ -23,13 +23,12 @@ source env/bin/activate
 Install packages
 
 ```bash
-pip install -r ./dev_requirements.txt
+pip install -r ./requirements-dev.txt
 ```
 
 ## Run
 
 ```bash
-python index.py
 pytest -o log_cli=true
 ```
 
@@ -39,3 +38,5 @@ pytest -o log_cli=true
 - Uses [requests-mocks](https://requests-mock.readthedocs.io) for mocking api requests.
 - Uses [pytest](https://docs.pytest.org/en/8.2.x/) for unit tests.
 - Uses [pytest-mock](https://pytest-mock.readthedocs.io/en/latest/) for mocking.
+
+https://coolors.co/0b3c49-731963-fffdfd-cbd2d0-f0e100

@@ -1,14 +1,6 @@
-from modules.Transformer import Activity, Summary
+from modules.Transformer import EmailTemplateData
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from dataclasses import dataclass, field
 import css_inline
-
-
-@dataclass
-class EmailSummary:
-    date: str = ''
-    activities: list[Activity] = field(default_factory=list)
-    summary: Summary = field(default_factory=Summary)
 
 
 class EmailTemplate:
@@ -20,7 +12,7 @@ class EmailTemplate:
                           autoescape=select_autoescape(['html', 'xml']))
         self.template = env.get_template(template_name)
 
-    def generateHTML(self, data: EmailSummary) -> str:
+    def generateHTML(self, data: EmailTemplateData) -> str:
         """ Use email template to generate html from data."""
 
         html = self.template.render(data=data)

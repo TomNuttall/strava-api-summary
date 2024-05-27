@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
-from modules.EmailTemplate import EmailTemplate, EmailSummary
-from modules.Transformer import Summary, Activity
+from modules.EmailTemplate import EmailTemplate
+from modules.Transformer import Summary, Activity, EmailTemplateData
 
 
 emailTemplate = EmailTemplate('./templates/')
@@ -15,10 +15,11 @@ def test_generate_html():
                                duration=120.0, avg_heartrate=100,
                                date='Monday', date_time='12:00'))
 
-    data = EmailSummary(date='1st Jan - 7th Jan',
-                        summary=Summary(
-                            count=1, total_distance=10.0, total_time=1.0),
-                        activities=activities)
+    data = EmailTemplateData(athlete_id=0,
+                             date='1st Jan - 7th Jan',
+                             summary=Summary(
+                                 count=1, total_distance=10.0, total_time=1.0),
+                             activities=activities)
 
     # Act
     body = emailTemplate.generateHTML(data)

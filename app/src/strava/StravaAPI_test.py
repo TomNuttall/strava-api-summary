@@ -1,6 +1,6 @@
 import datetime as dt
-from modules.StravaAPI import StravaAPI, ACTIVITIES_URL
-from modules.StravaAuth import StravaAuth
+from strava.StravaAPI import StravaAPI, ACTIVITIES_URL
+from strava.StravaAuth import StravaAuth
 
 
 class MockAuth:
