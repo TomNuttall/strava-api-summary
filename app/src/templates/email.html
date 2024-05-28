@@ -126,7 +126,7 @@
             </td>
             <td>
               <p class="overview__text">Distance</p>
-              <p class="overview__value">{{ data.summary.total_distance|round(2) }} km</p>  
+              <p class="overview__value">{{ data.summary.total_distance|round(2) }}</p>  
             </td>
           </tr>
         </table>
@@ -145,16 +145,12 @@
             </td>
             <td>
               <div class="activities__date">
-                <p>{{ activity.date }}</p>
+                <p>{{ activity.date|slice(3) }}</p>
                 <p>@ {{ activity.date_time }}</p>
               </div>
             </td>
             <td>{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
-            {% if activity.distance > 0 %}
-              <td>{{ activity.distance|round(2) }} km</td>
-            {% else %}
-              <td></td>
-            {% endif %}
+            <td>{{ activity.distance|round(2) }} km</td>
             <td>{{ activity.avg_heartrate }} bpm</td>
           </tr>
           {% endfor %}
