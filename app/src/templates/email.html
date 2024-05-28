@@ -62,7 +62,7 @@
     }
 
     .activities__stripe {
-      background-color: white
+      background-color: #ffeaea;
     }
 
     .activities__icon {
@@ -121,8 +121,8 @@
             </td>
             <td>
               <p class="overview__text">Time</p>
-              <p class="overview__value">{{ (data.summary.total_time / 60)|round|int }}:{{ '%02d' %
-                (data.summary.total_time % 60) |round|int }}</p>  
+              <p class="overview__value">{{ (data.summary.total_time / 60)|round(1, 'floor')|int }}:{{ '%02d' %
+                (data.summary.total_time % 60) |round(1, 'floor')|int }}</p>  
             </td>
             <td>
               <p class="overview__text">Distance</p>
@@ -136,9 +136,9 @@
         <table>
           {% for activity in data.activities %}
           {% if loop.index % 2 %}
-          <tr class="activities__stripe">
-          {% else %}
           <tr>
+          {% else %}
+          <tr class="activities__stripe">
           {%endif %}
             <td>
               <div class="activities__icon"></div>    
