@@ -19,6 +19,7 @@
 
     .summary {
       padding-top: 3rem;
+      padding-bottom: 1.5rem;
     }
 
     .summary__title {
@@ -36,7 +37,7 @@
     }
 
     .overview {
-      padding: 3.5rem 0 2rem 1.5rem;
+      padding: 3rem 0 2rem 1.5rem;
       background-color: #FF8811;
     }
 
@@ -52,18 +53,29 @@
     }
 
     .activities {
-      padding: 2rem 0 2rem 1.5rem;
-      background-color: #9DD9D2;
+      padding: 2rem 0;
+      border-bottom: 0.25rem solid #FF8811;
+    }
+
+    .activities td {
+      padding: 0.5rem 0;
+    }
+
+    .activities__stripe {
+      background-color: white
     }
 
     .activities__icon {
+      margin: auto;
       width: 2.5rem;
       height: 2.5rem;
       border-radius: 50%;
-      text-align: center; 
-      vertical-align: middle;
       background-color: #392F5A;
       color: white;
+    }
+
+    .activities__date {
+      font-size: 0.8rem;
     }
 
     .profile {
@@ -78,6 +90,7 @@
       text-decoration: none;
       background-color: #392F5A;
       color: white;
+      font-weight: 500;
     }
 
     p {
@@ -107,13 +120,13 @@
               <p class="overview__value">{{ data.summary.count }}</p>    
             </td>
             <td>
-              <p class="overview__text">Distance</p>
-              <p class="overview__value">{{ data.summary.total_distance|round(2) }} km</p>  
-            </td>
-            <td>
               <p class="overview__text">Time</p>
               <p class="overview__value">{{ (data.summary.total_time / 60)|round|int }}:{{ '%02d' %
                 (data.summary.total_time % 60) |round|int }}</p>  
+            </td>
+            <td>
+              <p class="overview__text">Distance</p>
+              <p class="overview__value">{{ data.summary.total_distance|round(2) }} km</p>  
             </td>
           </tr>
         </table>
@@ -121,13 +134,27 @@
 
       <div class="activities">
         <table>
-          {% for activity in data.activities|reverse %}
+          {% for activity in data.activities %}
+          {% if loop.index % 2 %}
+          <tr class="activities__stripe">
+          {% else %}
           <tr>
-            <td class="activities__icon">M</td>
-            <td>{{ activity.date_time }}</td>
-            <td>{{ activity.type }}</td>
-            <td>{{ activity.distance|round(2) }} km</td>
+          {%endif %}
+            <td>
+              <div class="activities__icon"></div>    
+            </td>
+            <td>
+              <div class="activities__date">
+                <p>{{ activity.date }}</p>
+                <p>@ {{ activity.date_time }}</p>
+              </div>
+            </td>
             <td>{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
+            {% if activity.distance > 0 %}
+              <td>{{ activity.distance|round(2) }} km</td>
+            {% else %}
+              <td></td>
+            {% endif %}
             <td>{{ activity.avg_heartrate }} bpm</td>
           </tr>
           {% endfor %}

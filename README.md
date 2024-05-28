@@ -31,6 +31,8 @@ Demo Project: Run a weekly Lambda to call the Strava API and send an activity su
 
 ## Run
 
+Generate app/example_email.html
+
 ```
 cd app/src
 python index.py

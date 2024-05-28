@@ -35,13 +35,13 @@ if __name__ == "__main__":
     activities.append(Activity(id=1, name='Morning Run', type='Ride', distance=0.0,
                                duration=25.0, avg_heartrate=100,
                                date='Tuesday', date_time='12:00'))
-    activities.append(Activity(id=1, name='Morning Run', type='Run', distance=1000.0,
+    activities.append(Activity(id=1, name='Morning Run', type='Run', distance=4.0,
                                duration=21.0, avg_heartrate=100,
                                date='Wednesday', date_time='12:00'))
-    activities.append(Activity(id=1, name='Morning Run', type='Run', distance=1000.0,
+    activities.append(Activity(id=1, name='Morning Run', type='Run', distance=6.0,
                                duration=22.0, avg_heartrate=100,
                                date='Thursday', date_time='12:00'))
-    activities.append(Activity(id=1, name='Morning Run', type='Run', distance=1000.0,
+    activities.append(Activity(id=1, name='Morning Run', type='Run', distance=4.0,
                                duration=20.0, avg_heartrate=100,
                                date='Friday', date_time='12:00'))
 
@@ -52,5 +52,5 @@ if __name__ == "__main__":
                              activities=activities)
 
     body = emailTemplate.generateHTML(data)
-    with open('test.html', 'w') as file:
+    with open('../example_email.html', 'w') as file:
         file.write(body)
