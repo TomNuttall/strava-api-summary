@@ -1,4 +1,4 @@
-def date_ordinal(n: int) -> str:
+def date_ordinal(n: str) -> str:
     """ Pretty month date."""
 
     dic = {'01': 'st', '21': 'st', '31': 'st',
