@@ -7,8 +7,6 @@
 - Generate html with inline styling for stats with Jinja2 template
 - Use SES to send a summary email
 
-Icons taken from https://www.streamlinehq.com/icons/streamline-bold?search=sport&icon=ico_Uc6Zg4ujUEUEd3Zw
-
 ### API Example
 
 [Activity Response](https://developers.strava.com/docs/reference/#api-models-DetailedActivity)
