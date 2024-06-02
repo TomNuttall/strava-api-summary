@@ -55,9 +55,9 @@ Add `TARGET_EMAIL` and `SEND_EMAIL` environment variables for the lamba and use 
 Add `ATHLETE_ID` environment variables for the lamba and use strava athlete id.
 Add `ASSET_URL` for icon image cdn path
 
-
-| Name             | Reason                   |
-| ---------------- | ------------------------ |
-| TARGET_EMAIL.    | ee  |
-
-| REPORT_BUCKET    | Bucket for output        |
+| Name         | Reason                      |
+| ------------ | --------------------------- |
+| TARGET_EMAIL | Verified email to send to   |
+| SEND_EMAIL   | Verified email to send from |
+| ATHLETE_ID   | Strava athlete id           |
+| ASSET_URL    | Path to hosted icon assets  |

@@ -37,12 +37,10 @@ python exanple_email.py
 ### Tests
 
 ```bash
-python example_email.py
+pytest
 ```
 
 - Uses [moto](http://docs.getmoto.org/en/latest/) for mocking aws services.
 - Uses [requests-mocks](https://requests-mock.readthedocs.io) for mocking api requests.
 - Uses [pytest](https://docs.pytest.org/en/8.2.x/) for unit tests.
 - Uses [pytest-mock](https://pytest-mock.readthedocs.io/en/latest/) for mocking.
-
-https://coolors.co/0b3c49-731963-fffdfd-cbd2d0-f0e100
