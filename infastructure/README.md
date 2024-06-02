@@ -51,10 +51,6 @@ Add a verified domain and a verified email in SES
 
 ## Lambda environment variables
 
-Add `TARGET_EMAIL` and `SEND_EMAIL` environment variables for the lamba and use the verified emails.
-Add `ATHLETE_ID` environment variables for the lamba and use strava athlete id.
-Add `ASSET_URL` for icon image cdn path
-
 | Name         | Reason                      |
 | ------------ | --------------------------- |
 | TARGET_EMAIL | Verified email to send to   |
