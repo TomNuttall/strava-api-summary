@@ -1,3 +1,6 @@
 # Credit
 
-Icons taken from https://www.streamlinehq.com/icons/streamline-bold?search=sport&icon=ico_Uc6Zg4ujUEUEd3Zw
+Icons
+
+https://www.streamlinehq.com/icons/streamline-bold/sports/athletics/sport-runner
+https://www.streamlinehq.com/icons/streamline-bold/sports/fitness/fitness-bicycle-1
