@@ -28,5 +28,5 @@ jobs:
 
       - name: Deploy static assets to S3 bucket
         run: |
-          aws s3 sync ./assets/ ${{ secrets.AWS_BUCKET }} --delete
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "assets/*"
+          aws s3 sync ./assets/email ${{ secrets.AWS_BUCKET }}/email --delete
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/assets/email/*"
