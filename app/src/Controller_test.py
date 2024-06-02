@@ -47,7 +47,7 @@ def test_handler(requests_mock):
                       json=response,
                       status_code=200)
 
-    emailTemplate = EmailTemplate('./templates/')
+    emailTemplate = EmailTemplate('./templates/', '')
     mailer = Mailer(from_email)
     stravaAPI = StravaAPI(StravaAuth())
     transformer = Transformer()

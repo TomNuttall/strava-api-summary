@@ -2,7 +2,7 @@ import os
 from Controller import Controller
 from modules.EmailTemplate import EmailTemplate
 from modules.Mailer import Mailer
-from modules.Transformer import Transformer, Activity, Summary, EmailTemplateData
+from modules.Transformer import Transformer
 from strava.StravaAuth import StravaAuth
 from strava.StravaAPI import StravaAPI
 
