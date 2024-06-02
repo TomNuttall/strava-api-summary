@@ -3,8 +3,11 @@
 ## Overview
 
 - CloudFormation templates used to deploy infastructure on AWS.
-- GitHub action runs on push to main branch and change in app or tests folder.
-  - Runs lambda unit tests, builds lambda package then deploys.
+- GitHub action runs on push to main branch.
+  - deploy-lambda runs on change in app/src folder.
+    - Runs lambda unit tests, builds lambda package then deploys.
+  - deploy-assets runs on change in assets folder.
+    - Syncs image assets folder with s3 bucket.
 
 ## Architecture Diagram
 
@@ -49,3 +52,5 @@ Add a verified domain and a verified email in SES
 ### Environment variables for lambda
 
 Add `TARGET_EMAIL` and `SEND_EMAIL` environment variables for the lamba and use the verified emails.
+Add `ATHLETE_ID` environment variables for the lamba and use strava athlete id.
+Add `ASSET_URL` for icon image cdn path

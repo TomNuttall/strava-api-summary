@@ -2,13 +2,14 @@
 
 Demo Project: Run a weekly Lambda to call the Strava API and send an activity summary email.
 
-<img
-  src='./diagrams/design.svg'
-  raw=true
-  alt='Wireframe design'
-  width="auto"
-  height="400px"
-/>
+<div>
+  <img
+    src='./screenshots/gmail-mobile.png'
+    alt='Gmail mobile'
+    width="auto"
+    height="400px"
+  />
+</div>
 
 ## Project Overview
 
@@ -35,5 +36,5 @@ Generate app/example_email.html
 
 ```
 cd app/src
-python index.py
+python example_email.py
 ```
