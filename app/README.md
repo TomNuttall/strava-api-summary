@@ -7,7 +7,9 @@
 - Generate html with inline styling for stats with Jinja2 template
 - Use SES to send a summary email
 
-### Example
+Icons taken from https://www.streamlinehq.com/icons/streamline-bold?search=sport&icon=ico_Uc6Zg4ujUEUEd3Zw
+
+### API Example
 
 [Activity Response](https://developers.strava.com/docs/reference/#api-models-DetailedActivity)
 
@@ -29,10 +31,16 @@ pip install -r ./requirements-dev.txt
 ## Run
 
 ```bash
-pytest -o log_cli=true
+python exanple_email.py
 ```
 
+[Email Design](https://codepen.io/krychek50/pen/rNgWMby)
+
 ### Tests
+
+```bash
+python example_email.py
+```
 
 - Uses [moto](http://docs.getmoto.org/en/latest/) for mocking aws services.
 - Uses [requests-mocks](https://requests-mock.readthedocs.io) for mocking api requests.

@@ -35,5 +35,6 @@ class Controller:
             res_data, athlete_id, f'{from_date_str} - {to_date_str}')
 
         body = self.emailTemplate.generateHTML(data)
+
         res = self.mailer.sendEmail(send_to_email, 'Weekly Report', body)
         return res

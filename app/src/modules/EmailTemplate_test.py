@@ -3,7 +3,7 @@ from modules.EmailTemplate import EmailTemplate
 from modules.Transformer import Summary, Activity, EmailTemplateData
 
 
-emailTemplate = EmailTemplate('./templates/')
+emailTemplate = EmailTemplate('./templates/', './')
 
 
 def test_generate_html():
