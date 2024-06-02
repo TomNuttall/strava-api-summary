@@ -1,0 +1,32 @@
+name: Build + Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'assets/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials for S3 Access
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_BUCKET_ROLE_ARN }}
+          role-duration-seconds: 900
+          aws-region: eu-west-2
+
+      - name: Deploy static assets to S3 bucket
+        run: |
+          aws s3 sync ./assets/ ${{ secrets.AWS_BUCKET }} --delete
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ARN }} --paths "/email/*"

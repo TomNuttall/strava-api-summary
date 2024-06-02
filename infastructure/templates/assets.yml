@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'Github access to s3 and cloudfront'
+
+Parameters:
+  ProjectPrefix:
+    Type: String
+    Description: 'Name of Project Prefix'
+  ProjectName:
+    Type: String
+    Description: 'Name of Project'
+  ProjectRepo:
+    Type: String
+    Description: 'Repo Path i.e GitHubUser/RepoName'
+  S3Bucket:
+    Type: String
+  CDN:
+    Type: String
+
+Resources:
+  GitHubActionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${ProjectPrefix}-role-${ProjectName}-github-s3'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Federated:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Action:
+              - 'sts:AssumeRoleWithWebIdentity'
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: 'sts.amazonaws.com'
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub 'repo:${ProjectRepo}:*'
+      Policies:
+        - PolicyName: !Sub '${ProjectPrefix}-policy-${ProjectName}-github-s3'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action: 's3:ListBucket'
+                Resource: !Sub arn:aws:s3:::${S3Bucket}/email
+              - Effect: 'Allow'
+                Action:
+                  - 's3:DeleteObject'
+                  - 's3:GetObject'
+                  - 's3:PutObject'
+                  - 's3:PutObjectAcl'
+                Resource: !Sub arn:aws:s3:::${S3Bucket}/email
+              - Effect: 'Allow'
+                Action: 'cloudfront:CreateInvalidation'
+                Resource: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CDN}'
