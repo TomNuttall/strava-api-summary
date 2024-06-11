@@ -10,5 +10,4 @@ Github action syncs everything in the email folder to the s3 bucket
 
 Icons sourced from
 
-- https://www.streamlinehq.com/icons/streamline-bold/sports/athletics/sport-runner
-- https://www.streamlinehq.com/icons/streamline-bold/sports/fitness/fitness-bicycle-1
+- https://www.streamlinehq.com/icons/streamline-bold/sports
