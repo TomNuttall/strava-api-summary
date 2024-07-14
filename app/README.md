@@ -32,8 +32,6 @@ pip install -r ./requirements-dev.txt
 python exanple_email.py
 ```
 
-[Email Design](https://codepen.io/krychek50/pen/rNgWMby)
-
 ### Tests
 
 ```bash
