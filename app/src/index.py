@@ -24,3 +24,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': 'Completed'
     }
+
+
+if __name__ == "__main__":
+    lambda_handler({}, {})

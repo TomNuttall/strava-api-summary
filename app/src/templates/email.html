@@ -177,7 +177,7 @@
                 <p>@ {{ activity.date_time }}</p>
               </div>
             </td>
-            <td>{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
+            <td>{{ (activity.duration / 60)|round(1, 'floor')|int }}:{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
             <td>{{ activity.distance|round(2) }} km</td>
             <td>{{ activity.avg_heartrate }} bpm</td>
           </tr>

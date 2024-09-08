@@ -26,10 +26,27 @@ Install packages
 pip install -r ./requirements-dev.txt
 ```
 
+Dependancy upgrade
+
+````bash
+rm -rf env
+python3 -m venv env
+source env/bin/activate
+pip install -r ./requirements-dev.txt
+pip-review --local --auto
+pip freeze >requirements-dev.txt
+```bash
+
 ## Run
 
 ```bash
-python exanple_email.py
+python example_email.py
+````
+
+Debug data with
+
+```bash
+python index.py
 ```
 
 ### Tests
