@@ -28,14 +28,14 @@ pip install -r ./requirements-dev.txt
 
 Dependancy upgrade
 
-````bash
+```bash
 rm -rf env
 python3 -m venv env
 source env/bin/activate
 pip install -r ./requirements-dev.txt
 pip-review --local --auto
 pip freeze >requirements-dev.txt
-```bash
+```
 
 ## Run
 
