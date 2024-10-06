@@ -28,7 +28,7 @@ Demo Project: Run a weekly Lambda to call the Strava API and send an activity su
 
 > :book: [App Readme](app/README.md)
 
-- AWS Lambda querys stravas api and sends an email summary
+- AWS Lambda queries stravas api and sends an email summary
 - [Email Design](https://codepen.io/krychek50/pen/rNgWMby)
 
 ### :bricks: Infastructure
