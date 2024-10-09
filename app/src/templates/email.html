@@ -11,68 +11,53 @@
       color: #2B303A;
     }
 
-    .content {
-      max-width: 600px;
-      margin: auto;
-      background-color: #FFF8F0;
+    .wrapper {
+      width: 600px;
+      margin: 0 auto;
     }
 
     .summary {
-      padding-top: 3rem;
-      padding-bottom: 1.5rem;
+      padding-top: 48px; /* 3rem */
+      padding-bottom: 24px; /* 1.5rem */
+      background-color: #FFF8F0;
     }
 
     .summary__title {
       text-align: center;
-      font-size: 2rem;
+      font-size: 32px; /* 2rem */
       font-weight: 600;
-      padding-bottom: 0.5rem;
+      padding-bottom: 8px; /* 8px */
     }
 
     .summary__subtitle {
       text-align: center;
-      font-size: 1.2rem;
-      padding-bottom: 1rem;
+      font-size: 19.2px; /* 1.2rem */
+      padding-bottom: 16px; /* 1rem */
     }
 
     .overview {
-      padding: 2.5rem 0 2rem 2.5rem;
+      padding: 40px 0 32px 40px; /* 2.5rem 0 2rem 2.5rem */
       background-color: #FF8811;
     }
 
     .overview__text {
-      font-size: 1.1rem;
+      font-size: 17.6px; /* 1.1rem */
       font-weight: 400;
-      padding-bottom: 0.25rem;
+      padding-bottom: 4px; /* 0.25rem */
     }
 
     .overview__value {
-      font-size: 2rem;
+      font-size: 32px; /* 2rem */
       font-weight: 700;
     }
 
-    .divider__triangle--right {
-      width: 0;
-      height: 0;
-      border-top: 1rem solid #FF8811;
-      border-right: 600px solid transparent;
-    }
-
-    .divider__triangle--left {
-      width: 0;
-      height: 0;
-      border-top: 1rem solid #FF8811;
-      border-left: 600px solid transparent;
-    }
-
-
     .activities {
-      padding: 1.5rem 0 2rem 0;
-      border-bottom: 1.5rem solid #FF8811;
+      padding: 24px 0 32px 0; /* 1.5rem 0 2rem 0 */
+      background-color: #FFF8F0;
     }
 
     .activities td {
-      padding: 0.5rem 0;
+      padding: 8px 0; /* 0.5rem 0 */
     }
 
     .activities__stripe {
@@ -81,9 +66,9 @@
 
     .activities__icon {
       margin: auto;
-      width: 2rem;
-      height: 2rem;
-      font-size: 0.8rem;
+      width: 32px; /* 2rem */
+      height: 32px; /* 2rem */
+      font-size: 12.8px; /* 0.8rem */
 
       border-radius: 50%; 
       color: #392F5A;
@@ -92,25 +77,26 @@
 
     .activities__img {  
       display: block;
-      padding: 0.375rem;
+      padding: 6px; /* 0.375rem */
       object-fit: cover;
-      width: 1.25rem;
-      height: 1.25rem;
+      width: 20px; /* 1.25rem */
+      height: 20px; /* 1.25rem */
     }
 
     .activities__date {
-      font-size: 0.8rem;
+      font-size: 12.8px; /* 0.8rem */
     }
 
     .profile {
       text-align: center;
-      padding-top: 4rem;
-      padding-bottom: 5rem;
+      padding-top: 48px; /* 3rem */
+      padding-bottom: 64px; /* 4rem */
+      background-color: #FF8811;
     }
 
     .profile__button {
-      border-radius: 0.25rem;
-      padding: 0.75rem 3rem;
+      border-radius: 4px; /* 0.25rem */
+      padding: 12px 48px; /* 0.75rem 3rem */
       text-decoration: none;
       background-color: #392F5A;
       color: white;
@@ -118,71 +104,65 @@
     }
 
     table {
-      width: 100%;
       border-spacing: 0;
+      border: 0;
       table-layout: fixed;
     } 
   </style>
 
   <body>
-    <div class="content">
-      <table role="presentation" class="summary">
-        <tr>
-          <td class="summary__title">Weekly Report</td>
-        </tr>
-        <tr>
-          <td class="summary__subtitle">{{ data.date }}</td>
-        </tr>
-      </table>
+    <table role="presentation" class="summary wrapper">
+      <tr>
+        <td class="summary__title">Weekly Report</td>
+      </tr>
+      <tr>
+        <td class="summary__subtitle">{{ data.date }}</td>
+      </tr>
+    </table>
 
-      <table role="presentation" class="overview">
-        <tr>
-          <td class="overview__text">Activities</td>
-          <td class="overview__text">Time</td>
-          <td class="overview__text">Distance</td>
-        </tr>
-        <tr>
-          <td class="overview__value">{{ data.summary.count }}</td>    
-          <td class="overview__value">{{ (data.summary.total_time / 60)|round(1, 'floor')|int }}:{{ '%02d' %
-              (data.summary.total_time % 60) |round(1, 'floor')|int }}</td>  
-          <td class="overview__value">{{ data.summary.total_distance|round(2) }}</td>  
-        </tr>
-      </table>
+    <table role="presentation" class="overview wrapper">
+      <tr>
+        <td class="overview__text">Activities</td>
+        <td class="overview__text">Time</td>
+        <td class="overview__text">Distance</td>
+      </tr>
+      <tr>
+        <td class="overview__value">{{ data.summary.count }}</td>    
+        <td class="overview__value">{{ (data.summary.total_time / 60)|round(1, 'floor')|int }}:{{ '%02d' %
+            (data.summary.total_time % 60) |round(1, 'floor')|int }}</td>  
+        <td class="overview__value">{{ data.summary.total_distance|round(2) }}</td>  
+      </tr>
+    </table>
 
-      <div class="divider__triangle--left"></div>
+    <table role="presentation" class="activities wrapper">
+      {% for activity in data.activities %}
+      {% if loop.index % 2 %}
+      <tr>
+      {% else %}
+      <tr class="activities__stripe">
+      {%endif %}
+        <td>
+          <div class="activities__icon">
+            <img class="activities__img" src="{{asset_url}}{{activity.type|lower}}.png" alt="{{activity.type}}" title="{{activity.type}}" width="20px" height="20px"/>
+          </div>    
+        </td>
+        <td class="activities__date">
+          <div>{{ activity.date[:3] }}</div>
+          <div>@ {{ activity.date_time }}</div>
+        </td>
+        <td>{{ (activity.duration / 60)|round(1, 'floor')|int }}:{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
+        <td>{{ activity.distance|round(2) }} km</td>
+        <td>{{ activity.avg_heartrate }} bpm</td>
+      </tr>
+      {% endfor %}
+    </table>
 
-      <table role="presentation" class="activities">
-        {% for activity in data.activities %}
-        {% if loop.index % 2 %}
-        <tr>
-        {% else %}
-        <tr class="activities__stripe">
-        {%endif %}
-          <td>
-            <div class="activities__icon">
-              <img class="activities__img" src="{{asset_url}}{{activity.type|lower}}.png" alt="{{activity.type}}" title="{{activity.type}}" width="20px" height="20px"/>
-            </div>    
-          </td>
-          <td class="activities__date">
-            <div>{{ activity.date[:3] }}</div>
-            <div>@ {{ activity.date_time }}</div>
-          </td>
-          <td>{{ (activity.duration / 60)|round(1, 'floor')|int }}:{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
-          <td>{{ activity.distance|round(2) }} km</td>
-          <td>{{ activity.avg_heartrate }} bpm</td>
-        </tr>
-        {% endfor %}
-      </table>
-
-      <div class="divider__triangle--right"></div>
-
-      <table role="presentation" class="profile">
-        <tr>
-          <td>
-            <a class="profile__button" href=https://www.strava.com/athletes/{{ data.athlete_id }}>View Strava Profile</a>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <table role="presentation" class="profile wrapper">
+      <tr>
+        <td>
+          <a class="profile__button" href=https://www.strava.com/athletes/{{ data.athlete_id }}>View Strava Profile</a>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
