@@ -26,14 +26,13 @@
       text-align: center;
       font-size: 2rem;
       font-weight: 600;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
     }
 
     .summary__subtitle {
       text-align: center;
       font-size: 1.2rem;
-      margin-bottom: 2rem;
+      padding-bottom: 1rem;
     }
 
     .overview {
@@ -118,11 +117,6 @@
       font-weight: 500;
     }
 
-    p {
-      margin-top: 0;
-      margin-bottom: 0;
-    } 
-
     table {
       width: 100%;
       border-spacing: 0;
@@ -132,63 +126,63 @@
 
   <body>
     <div class="content">
-      <div class="summary">
-        <h2 class="summary__title">Weekly Report</h2>
-        <p class="summary__subtitle">{{ data.date }}</p>
-      </div>
+      <table role="presentation" class="summary">
+        <tr>
+          <td class="summary__title">Weekly Report</td>
+        </tr>
+        <tr>
+          <td class="summary__subtitle">{{ data.date }}</td>
+        </tr>
+      </table>
 
-      <div class="overview">
-        <table>
-          <tr>
-            <td>
-              <p class="overview__text">Activities</p>
-              <p class="overview__value">{{ data.summary.count }}</p>    
-            </td>
-            <td>
-              <p class="overview__text">Time</p>
-              <p class="overview__value">{{ (data.summary.total_time / 60)|round(1, 'floor')|int }}:{{ '%02d' %
-                (data.summary.total_time % 60) |round(1, 'floor')|int }}</p>  
-            </td>
-            <td>
-              <p class="overview__text">Distance</p>
-              <p class="overview__value">{{ data.summary.total_distance|round(2) }}</p>  
-            </td>
-          </tr>
-        </table>
-      </div>
+      <table role="presentation" class="overview">
+        <tr>
+          <td class="overview__text">Activities</td>
+          <td class="overview__text">Time</td>
+          <td class="overview__text">Distance</td>
+        </tr>
+        <tr>
+          <td class="overview__value">{{ data.summary.count }}</td>    
+          <td class="overview__value">{{ (data.summary.total_time / 60)|round(1, 'floor')|int }}:{{ '%02d' %
+              (data.summary.total_time % 60) |round(1, 'floor')|int }}</td>  
+          <td class="overview__value">{{ data.summary.total_distance|round(2) }}</td>  
+        </tr>
+      </table>
+
       <div class="divider__triangle--left"></div>
 
-      <div class="activities">
-        <table>
-          {% for activity in data.activities %}
-          {% if loop.index % 2 %}
-          <tr>
-          {% else %}
-          <tr class="activities__stripe">
-          {%endif %}
-            <td>
-              <div class="activities__icon">
-                <img class="activities__img" src="{{asset_url}}{{activity.type|lower}}.png" alt="{{activity.type}}" title="{{activity.type}}" width="20px" height="20px"/>
-              </div>    
-            </td>
-            <td>
-              <div class="activities__date">
-                <p>{{ activity.date[:3] }}</p>
-                <p>@ {{ activity.date_time }}</p>
-              </div>
-            </td>
-            <td>{{ (activity.duration / 60)|round(1, 'floor')|int }}:{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
-            <td>{{ activity.distance|round(2) }} km</td>
-            <td>{{ activity.avg_heartrate }} bpm</td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
+      <table role="presentation" class="activities">
+        {% for activity in data.activities %}
+        {% if loop.index % 2 %}
+        <tr>
+        {% else %}
+        <tr class="activities__stripe">
+        {%endif %}
+          <td>
+            <div class="activities__icon">
+              <img class="activities__img" src="{{asset_url}}{{activity.type|lower}}.png" alt="{{activity.type}}" title="{{activity.type}}" width="20px" height="20px"/>
+            </div>    
+          </td>
+          <td class="activities__date">
+            <div>{{ activity.date[:3] }}</div>
+            <div>@ {{ activity.date_time }}</div>
+          </td>
+          <td>{{ (activity.duration / 60)|round(1, 'floor')|int }}:{{ '%02d' % (activity.duration % 60)|round|int }}:00</td>
+          <td>{{ activity.distance|round(2) }} km</td>
+          <td>{{ activity.avg_heartrate }} bpm</td>
+        </tr>
+        {% endfor %}
+      </table>
+
       <div class="divider__triangle--right"></div>
 
-      <div class="profile">
-        <a class="profile__button" href=https://www.strava.com/athletes/{{ data.athlete_id }}>View Strava Profile</a>
-      </div>
+      <table role="presentation" class="profile">
+        <tr>
+          <td>
+            <a class="profile__button" href=https://www.strava.com/athletes/{{ data.athlete_id }}>View Strava Profile</a>
+          </td>
+        </tr>
+      </table>
     </div>
   </body>
 </html>

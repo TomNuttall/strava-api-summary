@@ -17,4 +17,4 @@ class EmailTemplate:
         """ Use email template to generate html from data."""
 
         html = self.template.render(data=data, asset_url=self.asset_url)
-        return css_inline.inline(html, keep_style_tags=True)
+        return css_inline.inline(html, keep_style_tags=False)
