@@ -9,13 +9,6 @@ Demo Project: Run a weekly Lambda to call the Strava API and send an activity su
     width="auto"
     height="400px"
   />
-  <img
-    src='./screenshots/gmail-mobile.png'
-    alt='Gmail mobile'
-    width="auto"
-    height="400px"
-  />
-
 </div>
 
 ## Project Overview
