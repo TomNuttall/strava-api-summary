@@ -1,6 +1,6 @@
 # Strava API Summary
 
-Demo Project: Run a weekly Lambda to call the Strava API and send an activity summary email.
+Run a weekly Lambda to call the Strava API and send an activity summary email.
 
 <div>
   <img
